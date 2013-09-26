@@ -7,9 +7,7 @@
 //
 
 #import <MapKit/MapKit.h>
-#import "GBAnnotation.h"
 #import "GBAnnotationView.h"
-#import "GBStationAnnotation.h"
 
 @class GBMapView;
 

@@ -8,6 +8,8 @@
 
 #import "GBCustomCallout.h"
 
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+
 #define MIN_WIDTH_FOR_LEFT_CALLOUT 40
 #define MIN_WIDTH_FOR_RIGHT_CALLOUT 30
 #define MAX_WIDTH_FOR_LEFT_CALLOUT 40
@@ -844,9 +846,11 @@
     }
     self.arrow.active = YES;
     
+    SEL calloutAccessoryTappedSelector = sel_registerName("calloutAccessoryTapped:");
+    
     if (self.rightAccessoryView) {
-        if ([self.annotationView respondsToSelector:@selector(calloutAccessoryTapped:)]) {
-            [self.annotationView performSelector:@selector(calloutAccessoryTapped:) withObject:self.rightAccessoryView afterDelay:0.3];
+        if ([self.annotationView respondsToSelector:calloutAccessoryTappedSelector]) {
+            [self.annotationView performSelector:calloutAccessoryTappedSelector withObject:self.rightAccessoryView afterDelay:0.3];
         }
     }
     [self performSelector:@selector(deactivate) withObject:nil afterDelay:0.3];

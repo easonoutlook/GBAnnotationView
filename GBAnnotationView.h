@@ -9,8 +9,6 @@
 #import <MapKit/MapKit.h>
 #import "GBCustomCallout.h"
 
-@protocol GBAnnotation;
-
 @interface GBAnnotationView : MKAnnotationView <GBCustomCalloutViewDelegate>
 
 @property (nonatomic, weak) MKMapView *mapView;

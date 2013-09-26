@@ -7,7 +7,6 @@
 //
 
 #import "GBAnnotationView.h"
-#import "GBCalloutView.h"
 
 static UIImage *_standardPinImage;
 static UIView *_rightCalloutAccessoryView;
