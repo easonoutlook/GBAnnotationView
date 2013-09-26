@@ -1,0 +1,12 @@
+Podfile
+
+# Select the appropriate platform below
+platform :ios, '5.0'
+# platform :osx
+
+inhibit_all_warnings!
+
+# Add Kiwi as an exclusive dependency for the GBAnnotationViewTests target
+target :GBAnnotationViewTests, :exclusive => true do
+   pod 'Kiwi/XCTest'
+end
