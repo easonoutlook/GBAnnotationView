@@ -8,8 +8,20 @@
 
 #import "GBAnnotationView.h"
 
-@interface DemoAnnotationView : GBAnnotationView
+@interface DemoAnnotationView : GBAnnotationView <GBCustomCalloutViewDelegate>
 
 @property (nonatomic, strong) UIView *leftCalloutAccessoryView;
+@property (nonatomic, strong) UIView *bottomView;
+
+//- (BOOL)shouldExpandToAccessoryHeight;
+//- (BOOL)shouldExpandToAccessoryWidth;
+
+//- (BOOL)shouldVerticallyCenterLeftAccessoryToContent;
+//- (BOOL)shouldVerticallyCenterRightAccessoryToContent;
+
+- (BOOL)shouldConstrainLeftAccessoryToContent;
+//- (BOOL)shouldConstrainRightAccessoryToContent;
+
+- (CGPoint)calloutOffset;
 
 @end

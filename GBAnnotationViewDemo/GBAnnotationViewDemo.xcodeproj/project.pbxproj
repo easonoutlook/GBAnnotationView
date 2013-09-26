@@ -16,6 +16,7 @@
 		90712C9117F4C5C3003ABAF0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9017F4C5C3003ABAF0 /* DetailViewController.m */; };
 		90712C9417F4D1E7003ABAF0 /* DemoAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9317F4D1E7003ABAF0 /* DemoAnnotationView.m */; };
 		90712C9817F4D8B8003ABAF0 /* GBAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9717F4D8B8003ABAF0 /* GBAnnotation.m */; };
+		90712C9C17F4F082003ABAF0 /* GBRelatedInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9B17F4F082003ABAF0 /* GBRelatedInformationView.m */; };
 		90E42B6F17F492F300444885 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B6E17F492F300444885 /* Foundation.framework */; };
 		90E42B7117F492F300444885 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7017F492F300444885 /* CoreGraphics.framework */; };
 		90E42B7317F492F300444885 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7217F492F300444885 /* UIKit.framework */; };
@@ -60,6 +61,8 @@
 		90712C9317F4D1E7003ABAF0 /* DemoAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoAnnotationView.m; sourceTree = "<group>"; };
 		90712C9617F4D8B8003ABAF0 /* GBAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBAnnotation.h; sourceTree = "<group>"; };
 		90712C9717F4D8B8003ABAF0 /* GBAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBAnnotation.m; sourceTree = "<group>"; };
+		90712C9A17F4F082003ABAF0 /* GBRelatedInformationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBRelatedInformationView.h; sourceTree = "<group>"; };
+		90712C9B17F4F082003ABAF0 /* GBRelatedInformationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBRelatedInformationView.m; sourceTree = "<group>"; };
 		90E42B6B17F492F300444885 /* GBAnnotationViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GBAnnotationViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E42B6E17F492F300444885 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		90E42B7017F492F300444885 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -131,6 +134,15 @@
 			name = "View Controllers";
 			sourceTree = "<group>";
 		};
+		90712C9917F4F04C003ABAF0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				90712C9A17F4F082003ABAF0 /* GBRelatedInformationView.h */,
+				90712C9B17F4F082003ABAF0 /* GBRelatedInformationView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		90E42B6217F492F300444885 = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +188,7 @@
 				90E42BA117F4988200444885 /* iphone.storyboard */,
 				90E42B8017F492F300444885 /* Images.xcassets */,
 				90712C9517F4D856003ABAF0 /* View Controllers */,
+				90712C9917F4F04C003ABAF0 /* Views */,
 				90E42B7517F492F300444885 /* Supporting Files */,
 				90E42B7D17F492F300444885 /* GBAppDelegate.h */,
 				90E42B7E17F492F300444885 /* GBAppDelegate.m */,
@@ -360,6 +373,7 @@
 			files = (
 				90712C8B17F4B5AD003ABAF0 /* ViewController.m in Sources */,
 				90712C8717F4AAA5003ABAF0 /* GBCustomCallout.m in Sources */,
+				90712C9C17F4F082003ABAF0 /* GBRelatedInformationView.m in Sources */,
 				90712C9417F4D1E7003ABAF0 /* DemoAnnotationView.m in Sources */,
 				90712C9817F4D8B8003ABAF0 /* GBAnnotation.m in Sources */,
 				90E42B7B17F492F300444885 /* main.m in Sources */,

@@ -8,6 +8,9 @@
 
 #import "DemoAnnotationView.h"
 #import "GBAnnotation.h"
+#import "GBRelatedInformationView.h"
+
+static UIWebView *_bomAd;
 
 @interface DemoAnnotationView ()
 @property (nonatomic, readonly) UIImage *standardPinImage;
@@ -46,6 +49,7 @@
 
 
 #pragma mark - Annotation Callout Bubble
+#pragma mark leftCalloutAccessory
 - (UIView *)leftCalloutAccessoryView
 {
     GBAnnotation *annotation = self.annotation;
@@ -54,6 +58,46 @@
     imageView.clipsToBounds = YES;
     imageView.frame = CGRectMake(0, 0, 40, 40);
     return imageView;
+}
+
+
+#pragma mark bottomView
+- (UIView *)bottomView
+{
+    if (!_bottomView) {
+//        if (!_bomAd) {
+//            UIWebView *bottom = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 180, 15)];
+//            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://bigab.net/gb"]];
+//            [bottom loadRequest:request];
+//            bottom.backgroundColor = [UIColor clearColor];
+//            bottom.opaque = NO;
+//            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
+//            [bottom addGestureRecognizer:tap];
+//            _bomAd = bottom;
+//        }
+//        _bottomView = _bomAd;
+        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 180, 115)];
+        bottomView.subject = self.annotation.title;
+        _bottomView = bottomView;
+    }
+    return _bottomView;
+}
+
+- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
+{
+    NSLog(@"TAPPP!!!!");
+}
+
+#pragma mark Callout Modifications
+- (CGPoint)calloutOffset
+{
+    return CGPointMake(-8, 0);
+}
+
+
+- (BOOL)shouldConstrainLeftAccessoryToContent
+{
+    return self.bottomView ? YES : NO;
 }
 
 #pragma mark - Utility

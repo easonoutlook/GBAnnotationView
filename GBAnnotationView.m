@@ -11,8 +11,6 @@
 static UIImage *_standardPinImage;
 static UIView *_rightCalloutAccessoryView;
 
-static UIWebView *_bomAd;
-
 @interface GBAnnotationView ()
 {}
 - (UIImage *)standardPinImage;
@@ -56,16 +54,6 @@ static UIWebView *_bomAd;
     }
     
     return _rightCalloutAccessoryView;
-}
-
-
-- (UIView *)leftCalloutAccessoryView
-{
-    if (!_leftCalloutAccessoryView) {
-        _leftCalloutAccessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SFIcon"]];
-    }
-    
-    return _leftCalloutAccessoryView;
 }
 
 
@@ -148,6 +136,7 @@ static UIWebView *_bomAd;
     }
 }
 
+
 #pragma mark - Callback Delegate
 - (UIView *)leftAccessoryView
 {
@@ -161,36 +150,4 @@ static UIWebView *_bomAd;
 }
 
 
-- (CGPoint)calloutOffset
-{
-    return CGPointMake(-8, 0);
-}
-
-- (UIView *)bottomView
-{
-    if (!_bottomView) {
-        if (!_bomAd) {
-            UIWebView *bottom = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 180, 15)];
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://bigab.net/gb"]];
-            [bottom loadRequest:request];
-            bottom.backgroundColor = [UIColor clearColor];
-            bottom.opaque = NO;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
-            [bottom addGestureRecognizer:tap];
-            _bomAd = bottom;
-        }
-        _bottomView = _bomAd;
-    }
-    return _bottomView;
-}
-
-- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
-{
-    NSLog(@"TAPPP!!!!");
-}
-
-- (BOOL)shouldConstrainLeftAccessoryToContent
-{
-    return self.bottomView ? YES : NO;
-}
 @end
