@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3DBEF564783E4271AF70B8A6 /* libPods-GBAnnotationViewTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D88B2E1037419F9C6576D8 /* libPods-GBAnnotationViewTests.a */; };
+		90712C8617F4AAA5003ABAF0 /* GBAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C8117F4AAA5003ABAF0 /* GBAnnotationView.m */; };
+		90712C8717F4AAA5003ABAF0 /* GBCustomCallout.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C8317F4AAA5003ABAF0 /* GBCustomCallout.m */; };
+		90712C8817F4AAA5003ABAF0 /* GBMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C8517F4AAA5003ABAF0 /* GBMapView.m */; };
 		90E42B6F17F492F300444885 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B6E17F492F300444885 /* Foundation.framework */; };
 		90E42B7117F492F300444885 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7017F492F300444885 /* CoreGraphics.framework */; };
 		90E42B7317F492F300444885 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7217F492F300444885 /* UIKit.framework */; };
@@ -37,6 +40,12 @@
 
 /* Begin PBXFileReference section */
 		01D88B2E1037419F9C6576D8 /* libPods-GBAnnotationViewTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GBAnnotationViewTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		90712C8017F4AAA5003ABAF0 /* GBAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBAnnotationView.h; path = ../../GBAnnotationView.h; sourceTree = "<group>"; };
+		90712C8117F4AAA5003ABAF0 /* GBAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBAnnotationView.m; path = ../../GBAnnotationView.m; sourceTree = "<group>"; };
+		90712C8217F4AAA5003ABAF0 /* GBCustomCallout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBCustomCallout.h; path = ../../GBCustomCallout.h; sourceTree = "<group>"; };
+		90712C8317F4AAA5003ABAF0 /* GBCustomCallout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBCustomCallout.m; path = ../../GBCustomCallout.m; sourceTree = "<group>"; };
+		90712C8417F4AAA5003ABAF0 /* GBMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBMapView.h; path = ../../GBMapView.h; sourceTree = "<group>"; };
+		90712C8517F4AAA5003ABAF0 /* GBMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBMapView.m; path = ../../GBMapView.m; sourceTree = "<group>"; };
 		90E42B6B17F492F300444885 /* GBAnnotationViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GBAnnotationViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E42B6E17F492F300444885 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		90E42B7017F492F300444885 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -168,6 +177,12 @@
 		90E42BB117F49B6400444885 /* GBAnnotationView */ = {
 			isa = PBXGroup;
 			children = (
+				90712C8017F4AAA5003ABAF0 /* GBAnnotationView.h */,
+				90712C8117F4AAA5003ABAF0 /* GBAnnotationView.m */,
+				90712C8217F4AAA5003ABAF0 /* GBCustomCallout.h */,
+				90712C8317F4AAA5003ABAF0 /* GBCustomCallout.m */,
+				90712C8417F4AAA5003ABAF0 /* GBMapView.h */,
+				90712C8517F4AAA5003ABAF0 /* GBMapView.m */,
 			);
 			name = GBAnnotationView;
 			sourceTree = "<group>";
@@ -303,8 +318,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90712C8717F4AAA5003ABAF0 /* GBCustomCallout.m in Sources */,
 				90E42B7B17F492F300444885 /* main.m in Sources */,
 				90E42B7F17F492F300444885 /* GBAppDelegate.m in Sources */,
+				90712C8617F4AAA5003ABAF0 /* GBAnnotationView.m in Sources */,
+				90712C8817F4AAA5003ABAF0 /* GBMapView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
