@@ -22,6 +22,8 @@ typedef void (^AnnotationViewControlCallback)(GBMapView *mapView, MKAnnotationVi
 @property (nonatomic, copy) AnnotationViewCallback didDeselectAnnotationsView;
 @property (nonatomic, copy) AnnotationViewControlCallback calloutAccessoryControlTapped;
 
+@property (nonatomic, assign) Class annotationViewClass;
+
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
                   zoomLevel:(NSUInteger)zoomLevel
                    animated:(BOOL)animated;

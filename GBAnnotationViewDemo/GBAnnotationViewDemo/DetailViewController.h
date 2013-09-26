@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  DetailViewController.h
 //  GBAnnotationViewDemo
 //
 //  Created by Adam Barrett on 2013-09-26.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface DetailViewController : UIViewController
+
+@property (nonatomic, copy) NSString *imageName;
 
 @end

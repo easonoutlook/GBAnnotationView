@@ -34,6 +34,15 @@
 @end
 
 @implementation GBMapView
+#pragma mark - Property Accessors
+- (Class)annotationViewClass
+{
+    if (!_annotationViewClass) {
+        _annotationViewClass = [GBAnnotationView class];
+    }
+    return _annotationViewClass;
+}
+
 #pragma mark - LifeCycle
 - (void)_init
 {
@@ -92,13 +101,18 @@
 //    }
     // *********************************
     
+    Class annotationViewClass = self.annotationViewClass;
+    
     NSString *identifier = NSStringFromClass([annotation class]); //???: maybe don't do this? - BigAB
-    GBAnnotationView *annotationView = (GBAnnotationView *)[self dequeueReusableAnnotationViewWithIdentifier:identifier];
+    id annotationView = [self dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     if (annotationView == nil)
     {
-        annotationView = [[GBAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
-        annotationView.mapView = self;
+        annotationView = [[[annotationViewClass class] alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+        if ([annotationView respondsToSelector:@selector(setMapView:)]) {
+            [annotationView setMapView:self];
+        }
+        
     }
     return annotationView;
 }

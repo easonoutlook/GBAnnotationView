@@ -15,6 +15,7 @@ static UIWebView *_bomAd;
 
 @interface GBAnnotationView ()
 {}
+- (UIImage *)standardPinImage;
 @end
 
 @implementation GBAnnotationView
