@@ -16,6 +16,8 @@
 #define MAX_WIDTH_FOR_RIGHT_CALLOUT 40
 #define CALLOUT_HORZ_PADDING   5
 #define CALLOUT_VERT_PADDING   5
+#define CALLOUT_MARGIN_HORZ    10
+#define CALLOUT_MARGIN_VERT    10
 #define SUBVIEW_PADDING        5
 #define ANCHOR_MARGIN          37
 
@@ -548,12 +550,6 @@
         viewslayoutRect = CGRectIntegral(viewslayoutRect);
         [self positionView:view inRect:viewslayoutRect alignment:align];
         
-//        if (view == self.rightAccessoryView) {
-//            UIView *myView = [[UIView alloc] initWithFrame:viewslayoutRect];
-//            myView.backgroundColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
-//            [self addSubview:myView];
-//        }
-        
     }
 }
 
@@ -695,9 +691,15 @@
     // if animation type is Bounce
     // - determine layer.anchorPoint (based on self.anchorpoint?)
     // if that moves the view a bit move it back
-    [self animateInWithType:self.presentAnimation];
+    if ([self isContainedByConstrainingRect]) {
+        [self animateInWithType:self.presentAnimation];
+    } else {
+        [self moveMapToContainCalloutThen:^{
+            [self animateInWithType:self.presentAnimation];
+        }];
+    }
+    
 }
-
 
 - (void)animateOut
 {
@@ -824,6 +826,31 @@
     
     self.layer.position = position;
     self.layer.anchorPoint = point;
+}
+
+- (BOOL)isContainedByConstrainingRect
+{
+    return CGRectContainsRect(CGRectInset(self.constrainingRect, CALLOUT_MARGIN_HORZ, CALLOUT_MARGIN_VERT), self.frame);
+}
+
+
+- (void)moveMapToContainCalloutThen:(void(^)(void))callback
+{
+    if ([self.delegate respondsToSelector:@selector(moveMapByOffset:then:)]) {
+        CGPoint offset = [self offsetToContainRect:self.frame inRect:CGRectInset(self.constrainingRect, CALLOUT_MARGIN_HORZ, CALLOUT_MARGIN_VERT)];
+        [self.delegate moveMapByOffset:offset then:callback];
+    } else {
+        callback();
+    }
+}
+
+
+- (CGPoint)offsetToContainRect:(CGRect)innerRect inRect:(CGRect)outerRect {
+    CGFloat nudgeRight  = MAX(0, CGRectGetMinX(outerRect) - CGRectGetMinX(innerRect));
+    CGFloat nudgeLeft   = MIN(0, CGRectGetMaxX(outerRect) - CGRectGetMaxX(innerRect));
+    CGFloat nudgeTop    = MAX(0, CGRectGetMinY(outerRect) - CGRectGetMinY(innerRect));
+    CGFloat nudgeBottom = MIN(0, CGRectGetMaxY(outerRect) - CGRectGetMaxY(innerRect));
+    return CGPointMake(nudgeLeft ?: nudgeRight, nudgeTop ?: nudgeBottom);
 }
 
 

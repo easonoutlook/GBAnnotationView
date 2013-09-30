@@ -76,7 +76,7 @@ typedef enum {
 
 @end
 
-#pragma mark - GBCustomCalloutProtocol
+#pragma mark - GBCustomCalloutDelegateProtocol
 #pragma mark -
 @protocol GBCustomCalloutViewDelegate <NSObject>
 
@@ -109,6 +109,8 @@ typedef enum {
 - (BOOL)shouldVerticallyCenterRightAccessoryToContent;
 - (BOOL)shouldConstrainLeftAccessoryToContent;
 - (BOOL)shouldConstrainRightAccessoryToContent;
+
+- (void)moveMapByOffset:(CGPoint)offset then:(void(^)(void))callback;
 
 @end
 
