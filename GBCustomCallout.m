@@ -8,18 +8,24 @@
 
 #import "GBCustomCallout.h"
 
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
-#define MIN_WIDTH_FOR_LEFT_CALLOUT 40
+#define MIN_WIDTH_FOR_LEFT_CALLOUT  40
 #define MIN_WIDTH_FOR_RIGHT_CALLOUT 30
-#define MAX_WIDTH_FOR_LEFT_CALLOUT 40
+#define MAX_WIDTH_FOR_LEFT_CALLOUT  40
 #define MAX_WIDTH_FOR_RIGHT_CALLOUT 40
-#define CALLOUT_HORZ_PADDING   5
-#define CALLOUT_VERT_PADDING   5
-#define CALLOUT_MARGIN_HORZ    10
-#define CALLOUT_MARGIN_VERT    10
-#define SUBVIEW_PADDING        5
-#define ANCHOR_MARGIN          37
+
+#define CALLOUT_HORZ_PADDING        5
+#define CALLOUT_VERT_PADDING        5
+
+#define CALLOUT_MARGIN_HORZ         10
+#define CALLOUT_MARGIN_VERT         10
+
+#define SUBVIEW_PADDING             5
+#define SUBVIEW_HORZ_MARGIN         5
+#define SUBVIEW_VERT_MARGIN         5
+
+#define ANCHOR_MARGIN               37
 
 @interface GBCustomCallout ()
 {}
@@ -32,6 +38,10 @@
 @property (nonatomic, assign) CGRect constrainingRect;
 @property (nonatomic, assign) GBCustomCalloutArrowDirection arrowDirection;
 @property (nonatomic, assign) CGPoint anchorPoint;
+
+@property (nonatomic, strong) NSArray *centerColumn;
+@property (nonatomic, strong) NSArray *middleRow;
+@property (nonatomic, strong) NSArray *outliers;
 
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryHeight;
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryWidth;
@@ -194,19 +204,23 @@
     return _backgroundView;
 }
 
+
 - (UIView *)arrow
 {
     if (!_arrow) {
         _arrow = [[GBCustomCalloutArrow alloc] initWithFrame:CGRectMake(0, 0, 25, 15)];
     }
+    
     return _arrow;
 }
+
 
 - (void)setArrowDirection:(GBCustomCalloutArrowDirection)arrowDirection
 {
     _arrowDirection = arrowDirection;
     self.arrow.direction = arrowDirection;
 }
+
 
 - (CGPoint)offset
 {
@@ -215,6 +229,24 @@
     }
     
     return _offset;
+}
+
+
+- (NSArray *)centerColumn
+{
+    return _centerColumn ? : (_centerColumn = [NSMutableArray new]);
+}
+
+
+- (NSArray *)middleRow
+{
+    return _middleRow ? : (_middleRow = [NSMutableArray new]);
+}
+
+
+- (NSArray *)outliers
+{
+    return _outliers ? : (_outliers = [NSMutableArray new]);
 }
 
 
@@ -274,6 +306,8 @@
     self.clipsToBounds = YES;
     self.layer.cornerRadius = 10;
     self.layer.masksToBounds = YES;
+    self.autoresizesSubviews = NO;
+    self.autoresizingMask = UIViewAutoresizingNone;
     self.presentAnimation = GBCustomCalloutAnimationBounce;
     self.dismissAnimation = GBCustomCalloutAnimationFade;
     
@@ -326,6 +360,8 @@
                               inMapView:(MKMapView *)mapView
 {
     self.annotationView = annotationView;
+    self.mapView = mapView;
+    
     self.title = annotationView.annotation.title;
     self.subtitle = annotationView.annotation.subtitle;
     
@@ -335,16 +371,14 @@
     }
     
     [self configureCalloutWithAnnotationView:annotationView mapView:mapView];
+    
+    // need layout before positioning
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
     [self positionCalloutRelativeTo:annotationView];
+    
     [self addCalloutToAnnotationView:annotationView];
     [self animateIn];
-}
-
-
-- (void)dismiss
-{
-    self.annotationView = nil;
-    [self animateOut];
 }
 
 
@@ -352,10 +386,9 @@
                                    mapView:(MKMapView *)mapView
 {
     [self configureSubviews];
-    self.constrainingRect = [self determineContraintRectWith:mapView inAnnotationView:annotationView];
+    
     [self sizeToFit];
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
+    self.constrainingRect = [self determineContraintRectWith:mapView inAnnotationView:annotationView];
     self.arrowDirection = [self determineArrowDirectionWithMapView:mapView annotationView:annotationView];
     self.anchorPoint = [self determineAnchorPointWith:annotationView];
 }
@@ -417,8 +450,8 @@
     self.center = CGPointMake(CGRectGetMidX(self.constrainingRect), centerY);
     
     // move up or down for arrow
-    CGFloat yOffsetForArrow = self.arrow.frame.size.height*(pointingDown ? -1 : 1);
-    self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow+(pointingDown ? 1 : -1));
+    CGFloat yOffsetForArrow = self.arrow.frame.size.height * (pointingDown ? -1 : 1);
+    self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
     // scoot to the left or right if not wide enough for arrow to point
     CGFloat minPointX = CGRectGetMinX(self.frame) + ANCHOR_MARGIN;
@@ -427,16 +460,18 @@
     CGFloat adjustX = 0;
     
     if (self.anchorPoint.x < minPointX) adjustX = self.anchorPoint.x - minPointX;
+    
     if (self.anchorPoint.x > maxPointX) adjustX = self.anchorPoint.x - maxPointX;
     
     // make sure frame is not on half pixels CGRectIntegral(self.frame)
-    self.frame = CGRectIntegral( CGRectOffset(self.frame, adjustX, 0) );
+    self.frame = CGRectOffset(self.frame, adjustX, 0);
     
     CGSize arrowSize = self.arrow.frame.size;
     self.arrow.center = self.anchorPoint;
-    CGFloat arrowOffset = pointingDown ? -(arrowSize.height/2) : (arrowSize.height/2);
-    self.arrow.frame = CGRectIntegral( CGRectOffset(self.arrow.frame, 0, arrowOffset ) );
+    CGFloat arrowOffset = pointingDown ? -(arrowSize.height / 2) : (arrowSize.height / 2);
+    self.arrow.frame = CGRectOffset(self.arrow.frame, 0, arrowOffset);
 }
+
 
 - (void)addCalloutToAnnotationView:(MKAnnotationView *)annotationView
 {
@@ -446,20 +481,48 @@
     [annotationView addSubview:self];
 }
 
+
+- (void)dismiss
+{
+    self.annotationView = nil;
+    [self animateOut];
+}
+
+
 #pragma mark - Building Subviews
 - (void)configureSubviews
 {
+    NSMutableArray *centerColumn = [NSMutableArray new];
+    
+    [self addSubview:self.topView toGroup:centerColumn];
+    [self addSubview:self.contentView toGroup:centerColumn];
+    [self addSubview:self.bottomView toGroup:centerColumn];
+    
+    NSMutableArray *middleRow = [NSMutableArray new];
+    [self addSubview:self.leftAccessoryView toGroup:middleRow];
+    [self addSubview:self.rightAccessoryView toGroup:middleRow];
+    
+    NSMutableArray *outliers = [NSMutableArray new];
+    [self addSubview:self.headerView toGroup:outliers];
+    [self addSubview:self.footerView toGroup:outliers];
+    
     [self addSubview:self.backgroundView];
     
-    [self addSubview:self.bottomView];
-    [self addSubview:self.topView];
-    [self addSubview:self.leftAccessoryView];
-    [self addSubview:self.rightAccessoryView];
-    
-    [self addSubview:self.contentView];
-    
-    [self addSubview:self.headerView];
-    [self addSubview:self.footerView];
+    self.centerColumn = centerColumn;
+    self.middleRow = middleRow;
+    self.outliers = outliers;
+}
+
+
+- (void)addSubview:(UIView *)view toGroup:(NSMutableArray *)group
+{
+    if (view) {
+        [self addSubview:view];
+        
+        if (![group containsObject:view]) {
+            [group addObject:view];
+        }
+    }
 }
 
 
@@ -469,122 +532,119 @@
     /*
      ------------------------------------------
      |             Header View                |
-     ||________________________________________|
+     |||________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     ||Access..|      - titleView   |Accessor..|
+     |||Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     ||________________________________________|
+     |||________________________________________|
      */
     
     if (!self.annotationView) return;
     
-    CGRect layout = self.bounds;
+    CGRect layout = [self positionSubviewsRelativeToEachOther];
+    layout = CGRectInset(layout, -CALLOUT_HORZ_PADDING, -CALLOUT_VERT_PADDING);
+    self.bounds = layout;
     
-    self.backgroundView.frame = layout;
+    [self positionSubviewsRelativeToCallout];
+    
+    [self bringSubviewToFront:self.contentView];
     [self sendSubviewToBack:self.backgroundView];
-    
-    layout = CGRectInset(layout, CALLOUT_HORZ_PADDING, CALLOUT_VERT_PADDING);
-    
-    [self sliceEdge:CGRectMinYEdge OfRect:&layout forLayoutOfView:self.headerView];
-    [self sliceEdge:CGRectMaxYEdge OfRect:&layout forLayoutOfView:self.footerView];
-    
-    if (![self shouldConstrainLeftAccessoryToContent]) {
-        [self sliceEdge:CGRectMinXEdge OfRect:&layout forLayoutOfView:self.leftAccessoryView];
-    }
-    
-    if (![self shouldConstrainRightAccessoryToContent]) {
-        [self sliceEdge:CGRectMaxXEdge OfRect:&layout forLayoutOfView:self.rightAccessoryView];
-    }
-    
-    [self sliceEdge:CGRectMinYEdge OfRect:&layout forLayoutOfView:self.topView];
-    [self sliceEdge:CGRectMaxYEdge OfRect:&layout forLayoutOfView:self.bottomView];
-    
-    if ([self shouldConstrainLeftAccessoryToContent]) {
-        [self sliceEdge:CGRectMinXEdge OfRect:&layout forLayoutOfView:self.leftAccessoryView];
-    }
-    
-    if ([self shouldConstrainRightAccessoryToContent]) {
-        [self sliceEdge:CGRectMaxXEdge OfRect:&layout forLayoutOfView:self.rightAccessoryView];
-    }
-    
-    [self positionView:self.contentView inRect:layout alignment:GBCustomCalloutAlignmentLeftTop];
-    
-    if ([self shouldVerticallyCenterLeftAccessoryToContent]) {
-        self.leftAccessoryView.center = CGPointMake(self.leftAccessoryView.center.x, self.contentView.center.y);
-    }
-    
-    if ([self shouldVerticallyCenterRightAccessoryToContent]) {
-        self.rightAccessoryView.center = CGPointMake(self.rightAccessoryView.center.x, self.contentView.center.y);
-    }
-    
-    self.frame = CGRectIntegral(self.frame);
 }
 
 
-- (void)sliceEdge:(CGRectEdge)edge OfRect:(CGRect *)rect forLayoutOfView:(UIView *)view
+- (CGRect)positionSubviewsRelativeToEachOther
 {
-    if (!view) return;
-    GBCustomCalloutAlignment align = GBCustomCalloutAlignmentCenterMiddle;
+    __block CGRect wrappingRect = CGRectZero;
+    __block CGFloat y = 0.0;
     
-    CGFloat dimension = (edge == CGRectMinXEdge || edge == CGRectMaxXEdge) ? view.frame.size.width : view.frame.size.height;
+    [self.centerColumn
+     enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
+         wrappingRect = [self wrappingRect:wrappingRect
+                     forPositioningSubview:subview
+                                   atPoint:CGPointMake(0, y)];
+         y = CGRectGetMaxY(wrappingRect) + SUBVIEW_VERT_MARGIN;
+     }];
     
-    if (dimension > 0) {
-        if (view == self.rightAccessoryView) {
-            dimension = MAX(dimension, MIN_WIDTH_FOR_RIGHT_CALLOUT);
-        }
-        if (view == self.leftAccessoryView) {
-            dimension = MAX(dimension, MIN_WIDTH_FOR_LEFT_CALLOUT);
-            align = GBCustomCalloutAlignmentLeftTop;
-        }
-        if (view == self.bottomView && [self shouldConstrainLeftAccessoryToContent]) {
-            align = GBCustomCalloutAlignmentLeftMiddle;
-        }
-        CGRect viewslayoutRect;
-        CGRectDivide(*rect, &viewslayoutRect, &*rect, dimension + SUBVIEW_PADDING, edge);
-        viewslayoutRect = CGRectIntegral(viewslayoutRect);
-        [self positionView:view inRect:viewslayoutRect alignment:align];
-        
-    }
+    [self.middleRow
+     enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
+         CGPoint point;
+         
+         if (subview == self.leftAccessoryView) {
+             point = CGPointMake(-(CGRectGetWidth(subview.frame) + SUBVIEW_HORZ_MARGIN), 0);
+         }
+         
+         if (subview == self.rightAccessoryView) {
+             point = CGPointMake(CGRectGetMaxX(wrappingRect) + SUBVIEW_HORZ_MARGIN, 0);
+         }
+         
+         wrappingRect = [self wrappingRect:wrappingRect
+                     forPositioningSubview:subview
+                                   atPoint:point];
+     }];
+    
+    [self.outliers
+     enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
+         CGPoint point;
+         
+         if (subview == self.headerView) {
+             point = CGPointMake(CGRectGetMinX(wrappingRect), -(CGRectGetHeight(subview.frame) + SUBVIEW_VERT_MARGIN));
+         }
+         
+         if (subview == self.footerView) {
+             point = CGPointMake(CGRectGetMinX(wrappingRect), CGRectGetMaxY(wrappingRect) + SUBVIEW_VERT_MARGIN);
+         }
+         
+         wrappingRect = [self wrappingRect:wrappingRect
+                     forPositioningSubview:subview
+                                   atPoint:point];
+     }];
+    
+    return wrappingRect;
 }
 
 
-- (void)positionView:(UIView *)view inRect:(CGRect)rect alignment:(GBCustomCalloutAlignment)alignment
+- (CGRect)wrappingRect:(CGRect)rect forPositioningSubview:(UIView *)subview atPoint:(CGPoint)point
 {
-    // default to center
-    rect = CGRectIntegral(rect);
-    CGSize size = view.frame.size;
-    switch (alignment) {
-        case GBCustomCalloutAlignmentLeftBottom:
-            view.frame = CGRectMake(rect.origin.x, rect.origin.y, size.width, size.height);
-            view.center = CGPointMake(view.frame.origin.x, CGRectGetMaxY(rect)-(size.height/2));
-            break;
-        case GBCustomCalloutAlignmentLeftMiddle:
-            view.frame = CGRectMake(rect.origin.x, rect.origin.y, size.width, size.height);
-            view.center = CGPointMake(view.center.x, CGRectGetMidY(rect));
-            break;
-        case GBCustomCalloutAlignmentLeftTop:
-            view.frame = CGRectMake(rect.origin.x, rect.origin.y, size.width, size.height);
-            break;
-            
-        case GBCustomCalloutAlignmentRightMiddle:
-            view.frame = CGRectMake(CGRectGetMaxX(rect)-size.width, rect.origin.y, size.width, size.height);
-            break;
-            
-        case GBCustomCalloutAlignmentCenterMiddle:
-        default:
-            view.center = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
-            view.frame = CGRectIntegral(view.frame);
-            break;
+    if (!subview) return rect;
+    
+    CGRect f = subview.frame;
+    f.origin = point;
+    subview.frame = f;
+    
+    if (CGRectEqualToRect(rect, CGRectZero)) {
+        return f;
     }
-
+    
+    return CGRectUnion(rect, f);
 }
 
+
+- (void)positionSubviewsRelativeToCallout
+{
+    CGRect b = self.bounds;
+    if (self.leftAccessoryView) {
+        [self verticallyCenterView:self.leftAccessoryView inRect:b];
+    }
+    if (self.rightAccessoryView) {
+        [self verticallyCenterView:self.rightAccessoryView inRect:b];
+    }
+    if (self.backgroundView) {
+        self.backgroundView.frame = b;
+    }
+}
+
+- (void)verticallyCenterView:(UIView *)view inRect:(CGRect)rect
+{
+    CGRect f = view.frame;
+    f.origin = CGPointMake(f.origin.x, CGRectGetMidY(rect));
+    view.frame = f;
+}
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
@@ -592,7 +652,7 @@
     [self sizeToFitView:self.subtitleView ifClass:[GBCustomSubtitleLabel class]];
     [self sizeToFitView:self.contentView ifClass:[GBCustomContentView class]];
     
-    return CGSizeMake([self calculateWidth], [self calculateHeight]);
+    return self.bounds.size;
 }
 
 
@@ -601,87 +661,6 @@
     if ([view isKindOfClass:class]) {
         [view sizeToFit];
     }
-}
-
-
-- (CGFloat)calculateWidth
-{
-    CGFloat width = 0;
-    BOOL ExpandToAccessoryWidth = self.shouldExpandToAccessoryWidth;
-    
-    CGFloat content = self.contentView.frame.size.width;
-    CGFloat top = self.topView.frame.size.width;
-    CGFloat bottom = self.bottomView.frame.size.width;
-    CGFloat left = self.leftAccessoryView.frame.size.width;
-    if (left > 0) {
-        left = MAX(left, MIN_WIDTH_FOR_LEFT_CALLOUT);
-        left = (ExpandToAccessoryWidth ? left : MIN(left, MAX_WIDTH_FOR_LEFT_CALLOUT));
-    }
-    CGFloat right = self.rightAccessoryView.frame.size.width;
-    if (right > 0) {
-        right = MAX(right, MIN_WIDTH_FOR_RIGHT_CALLOUT);
-        right = (ExpandToAccessoryWidth ? right : MIN(right, MAX_WIDTH_FOR_RIGHT_CALLOUT));
-    }
-    CGFloat header = self.headerView.frame.size.width;
-    CGFloat footer = self.footerView.frame.size.width;
-    
-    CGFloat mainAreaWidth = content;
-    
-    if ([self shouldConstrainLeftAccessoryToContent] && left > 0) {
-        mainAreaWidth += left + SUBVIEW_PADDING;
-    }
-    
-    if ([self shouldConstrainRightAccessoryToContent] && right > 0) {
-        mainAreaWidth += right + 2*SUBVIEW_PADDING; // right view gets more padding
-    }
-    
-    CGFloat middleRowWidth = MAX(MAX(top, bottom), mainAreaWidth);
-    
-    if (![self shouldConstrainLeftAccessoryToContent] && left > 0) {
-        middleRowWidth += left + SUBVIEW_PADDING;
-    }
-    
-    if (![self shouldConstrainRightAccessoryToContent] && right > 0) {
-        middleRowWidth += right + 2*SUBVIEW_PADDING; // right view gets more padding
-    }
-    
-    width = MAX(middleRowWidth, MAX(header, footer));
-    width += CALLOUT_HORZ_PADDING * 2;
-    
-    return width;
-}
-
-
-- (CGFloat)calculateHeight
-{
-    CGFloat height = 0;
-    BOOL expandToAccessoryHeight = self.shouldExpandToAccessoryHeight;
-    
-    CGFloat content = self.contentView.frame.size.height;
-    CGFloat top = self.topView.frame.size.height;
-    CGFloat bottom = self.bottomView.frame.size.height;
-    CGFloat left = self.leftAccessoryView.frame.size.height;
-    CGFloat right = self.rightAccessoryView.frame.size.height;
-    CGFloat header = self.headerView.frame.size.height;
-    CGFloat footer = self.footerView.frame.size.height;
-    
-    NSInteger paddingPoints = 0;
-    if (top > 0 && (content > 0 || bottom > 0)) paddingPoints++;
-    if (bottom > 0 && content > 0) paddingPoints++;
-    CGFloat main = content + top + bottom + (paddingPoints * SUBVIEW_PADDING);
-    
-    height = expandToAccessoryHeight ? MAX(MAX(left, right), main) : main;
-    
-    paddingPoints = 0;
-    if (header > 0 && (height > 0 || footer > 0)) paddingPoints++;
-    if (footer > 0 && height > 0) paddingPoints++;
-    height = height + header + footer + (paddingPoints * SUBVIEW_PADDING);
-    
-    if (height > 0) {
-        height += CALLOUT_VERT_PADDING * 2;
-    }
-    
-    return height;
 }
 
 
@@ -698,94 +677,118 @@
             [self animateInWithType:self.presentAnimation];
         }];
     }
-    
 }
+
 
 - (void)animateOut
 {
     [self animateOutWithType:self.dismissAnimation];
 }
 
-- (void)animateInWithType:(GBCustomCalloutAnimation)type {
+
+- (void)animateInWithType:(GBCustomCalloutAnimation)type
+{
     __block GBCustomCallout *_self = self;
+    
     switch (type) {
-        case GBCustomCalloutAnimationFade:
-        {
+        case GBCustomCalloutAnimationFade: {
             self.alpha = 0;
             self.arrow.alpha = 0;
             self.hidden = NO;
             self.arrow.hidden = NO;
-            [UIView animateWithDuration:0.3 animations:^{
-                _self.alpha = 1;
-                _self.arrow.alpha = 1;
-            } completion:nil];
+            [UIView animateWithDuration:0.3
+                             animations:^{
+                                 _self.alpha = 1;
+                                 _self.arrow.alpha = 1;
+                             }
+             
+             
+                             completion:nil];
         }
             break;
             
         case GBCustomCalloutAnimationBounce:
-        default:
-        {
+        default: {
             [self setLayerAnchorFromAnnotationAnchorPoint];
             self.transform = CGAffineTransformMakeScale(0.5, 0.5);
             self.arrow.transform = CGAffineTransformMakeScale(0.5, 0.5);
             self.hidden = NO;
             self.arrow.hidden = NO;
-            [UIView animateWithDuration:0.15 animations:^{
-                _self.transform = CGAffineTransformMakeScale(1.05, 1.05);
-                _self.arrow.transform = CGAffineTransformMakeScale(1.05, 1.05);;
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.05 animations:^{
-                    _self.transform = CGAffineTransformIdentity;
-                    _self.arrow.transform = CGAffineTransformIdentity;
-                } completion:^(BOOL finished) {
-                    [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
-                }];
-            }];
+            [UIView animateWithDuration:0.15
+                             animations:^{
+                                 _self.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                                 _self.arrow.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                             }
+             
+             
+                             completion:^(BOOL finished) {
+                                 [UIView  animateWithDuration:0.05
+                                                   animations:^{
+                                                       _self.transform = CGAffineTransformIdentity;
+                                                       _self.arrow.transform = CGAffineTransformIdentity;
+                                                   }
+                                  
+                                  
+                                                   completion:^(BOOL finished) {
+                                                       [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
+                                                   }];
+                             }];
         }
             break;
     }
 }
 
 
-- (void)animateOutWithType:(GBCustomCalloutAnimation)type {
+- (void)animateOutWithType:(GBCustomCalloutAnimation)type
+{
     __block GBCustomCallout *_self = self;
+    
     switch (type) {
-        case GBCustomCalloutAnimationBounce:
-        {
+        case GBCustomCalloutAnimationBounce: {
             [self setLayerAnchorFromAnnotationAnchorPoint];
-            [UIView animateWithDuration:0.05 animations:^{
-                _self.transform = CGAffineTransformMakeScale(1.05, 1.05);
-                _self.arrow.transform = CGAffineTransformMakeScale(1.05, 1.05);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.15 animations:^{
-                    _self.transform = CGAffineTransformMakeScale(0.5, 0.5);
-                    _self.arrow.transform = CGAffineTransformMakeScale(0.5, 0.5);
-                } completion:^(BOOL finished) {
-                    [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
-                    [_self removeFromSuperview];
-                    [_self.arrow removeFromSuperview];
-                }];
-            }];
+            [UIView animateWithDuration:0.05
+                             animations:^{
+                                 _self.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                                 _self.arrow.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                             }
+             
+             
+                             completion:^(BOOL finished) {
+                                 [UIView  animateWithDuration:0.15
+                                                   animations:^{
+                                                       _self.transform = CGAffineTransformMakeScale(0.5, 0.5);
+                                                       _self.arrow.transform = CGAffineTransformMakeScale(0.5, 0.5);
+                                                   }
+                                  
+                                  
+                                                   completion:^(BOOL finished) {
+                                                       [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
+                                                       [_self removeFromSuperview];
+                                                       [_self.arrow removeFromSuperview];
+                                                   }];
+                             }];
         }
             break;
             
         case GBCustomCalloutAnimationFade:
-        default:
-        {
-            [UIView animateWithDuration:0.3 animations:^{
-                _self.alpha = 0;
-                _self.arrow.alpha = 0;
-            } completion:^(BOOL finished) {
-                [_self removeFromSuperview];
-                [_self.arrow removeFromSuperview];
-                _self.alpha = 1;
-                _self.arrow.alpha = 1;
-            }];
+        default: {
+            [UIView animateWithDuration:0.3
+                             animations:^{
+                                 _self.alpha = 0;
+                                 _self.arrow.alpha = 0;
+                             }
+             
+             
+                             completion:^(BOOL finished) {
+                                 [_self removeFromSuperview];
+                                 [_self.arrow removeFromSuperview];
+                                 _self.alpha = 1;
+                                 _self.arrow.alpha = 1;
+                             }];
         }
             break;
     }
 }
-
 
 
 - (void)setLayerAnchorFromAnnotationAnchorPoint
@@ -799,6 +802,10 @@
     anchorPoint.x /= width;
     anchorPoint.y /= height;
     
+    if (isnan(anchorPoint.x) || isnan(anchorPoint.y)) {
+        NSLog(@"Huh?");
+    }
+    
     [self setLayerAnchor:anchorPoint];
 }
 
@@ -809,6 +816,11 @@
     
     CGFloat width = CGRectGetWidth(b);
     CGFloat height = CGRectGetHeight(b);
+    
+    if (height <= 0 || width <= 0) {
+        NSLog(@"Bubble has no content");
+        return;
+    }
     
     CGPoint newPoint = CGPointMake(width * point.x, height * point.y);
     CGPoint oldPoint = CGPointMake(width * self.layer.anchorPoint.x, height * self.layer.anchorPoint.y);
@@ -828,13 +840,14 @@
     self.layer.anchorPoint = point;
 }
 
+
 - (BOOL)isContainedByConstrainingRect
 {
     return CGRectContainsRect(CGRectInset(self.constrainingRect, CALLOUT_MARGIN_HORZ, CALLOUT_MARGIN_VERT), self.frame);
 }
 
 
-- (void)moveMapToContainCalloutThen:(void(^)(void))callback
+- (void)moveMapToContainCalloutThen:(void (^)(void))callback
 {
     if ([self.delegate respondsToSelector:@selector(moveMapByOffset:then:)]) {
         CGPoint offset = [self offsetToContainRect:self.frame inRect:CGRectInset(self.constrainingRect, CALLOUT_MARGIN_HORZ, CALLOUT_MARGIN_VERT)];
@@ -845,12 +858,14 @@
 }
 
 
-- (CGPoint)offsetToContainRect:(CGRect)innerRect inRect:(CGRect)outerRect {
+- (CGPoint)offsetToContainRect:(CGRect)innerRect inRect:(CGRect)outerRect
+{
     CGFloat nudgeRight  = MAX(0, CGRectGetMinX(outerRect) - CGRectGetMinX(innerRect));
     CGFloat nudgeLeft   = MIN(0, CGRectGetMaxX(outerRect) - CGRectGetMaxX(innerRect));
     CGFloat nudgeTop    = MAX(0, CGRectGetMinY(outerRect) - CGRectGetMinY(innerRect));
     CGFloat nudgeBottom = MIN(0, CGRectGetMaxY(outerRect) - CGRectGetMaxY(innerRect));
-    return CGPointMake(nudgeLeft ?: nudgeRight, nudgeTop ?: nudgeBottom);
+    
+    return CGPointMake(nudgeLeft ? : nudgeRight, nudgeTop ? : nudgeBottom);
 }
 
 
@@ -866,11 +881,13 @@
     return NO;
 }
 
+
 - (void)activate
 {
     if ([self.backgroundView isKindOfClass:[GBCustomBackgroundView class]]) {
-        ((GBCustomBackgroundView*)self.backgroundView).active = YES;
+        ((GBCustomBackgroundView *)self.backgroundView).active = YES;
     }
+    
     self.arrow.active = YES;
     
     SEL calloutAccessoryTappedSelector = sel_registerName("calloutAccessoryTapped:");
@@ -880,6 +897,7 @@
             [self.annotationView performSelector:calloutAccessoryTappedSelector withObject:self.rightAccessoryView afterDelay:0.3];
         }
     }
+    
     [self performSelector:@selector(deactivate) withObject:nil afterDelay:0.3];
 }
 
@@ -887,8 +905,9 @@
 - (void)deactivate
 {
     if ([self.backgroundView isKindOfClass:[GBCustomBackgroundView class]]) {
-        ((GBCustomBackgroundView*)self.backgroundView).active = NO;
+        ((GBCustomBackgroundView *)self.backgroundView).active = NO;
     }
+    
     self.arrow.active = NO;
 }
 
@@ -946,6 +965,7 @@
     return self;
 }
 
+
 - (CGSize)sizeThatFits:(CGSize)size
 {
     __block CGFloat y = 0;
@@ -966,9 +986,9 @@
     /*
      ------------------------------------------
      | Title                                  |
-     ||________________________________________|
+     |||________________________________________|
      | Subtitle                               |
-     ||________________________________________|
+     |||________________________________________|
      */
     __block CGFloat y = 0;
     
@@ -995,6 +1015,7 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
     _gbCustomCalloutBackgroundInactiveColor = [UIColor whiteColor];
 }
 
+
 - (id)init
 {
     self = [super init];
@@ -1013,11 +1034,12 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
     self.backgroundColor = active ? _gbCustomCalloutBackgroundActiveColor : _gbCustomCalloutBackgroundInactiveColor;
 }
 
+
 @end
 
 
 #pragma mark - *** GBCustomCalloutArrow *** -
-@interface GBCustomCalloutArrow()
+@interface GBCustomCalloutArrow ()
 {}
 @property (nonatomic, strong) CAShapeLayer *downMask;
 @property (nonatomic, strong) CAShapeLayer *upMask;
@@ -1045,8 +1067,10 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
     if (!_triangleColor) {
         _triangleColor = [UIColor whiteColor];
     }
+    
     return _triangleColor;
 }
+
 
 - (void)setDirection:(GBCustomCalloutArrowDirection)direction
 {
@@ -1055,30 +1079,37 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
     self.layer.mask = mask;
 }
 
+
 - (CAShapeLayer *)downMask
 {
     if (!_downMask) {
         _downMask = [self maskingTriangleForDirection:GBCustomCalloutArrowDirectionDown];
     }
+    
     return _downMask;
 }
+
 
 - (CAShapeLayer *)upMask
 {
     if (!_upMask) {
         _upMask = [self maskingTriangleForDirection:GBCustomCalloutArrowDirectionUp];
     }
+    
     return _upMask;
 }
+
 
 - (CAShapeLayer *)maskingTriangleForDirection:(GBCustomCalloutArrowDirection)direction
 {
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
     CGMutablePathRef path = [self trianglePath:direction];
+    
     [maskLayer setPath:path];
     [maskLayer setFillColor:[[UIColor greenColor] CGColor]];
     return maskLayer;
 }
+
 
 - (CGMutablePathRef)trianglePath:(GBCustomCalloutArrowDirection)direction
 {
@@ -1086,6 +1117,7 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
     CGMutablePathRef path = CGPathCreateMutable();
     
     CGFloat leftY, midY, rightY;
+    
     if (direction == GBCustomCalloutArrowDirectionUp) {
         leftY  = CGRectGetMaxY(b);
         midY   = CGRectGetMinY(b);
@@ -1096,12 +1128,13 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
         rightY = CGRectGetMinY(b);
     }
     
-    CGPathMoveToPoint(   path, NULL, CGRectGetMinX(b), leftY); // bottom left
+    CGPathMoveToPoint(path, NULL, CGRectGetMinX(b), leftY);    // bottom left
     CGPathAddLineToPoint(path, NULL, CGRectGetMidX(b), midY); // top center
     CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(b), rightY); // bottom right
     
     return path;
 }
+
 
 - (void)_init
 {
@@ -1109,31 +1142,41 @@ static UIColor *_gbCustomCalloutBackgroundInactiveColor;
     self.backgroundColor = _gbCustomCalloutBackgroundInactiveColor;
 }
 
+
 - (id)init
 {
     self = [super init];
+    
     if (self) {
         [self _init];
     }
+    
     return self;
 }
+
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    
     if (self) {
         [self _init];
     }
+    
     return self;
 }
+
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
+    
     if (self) {
         [self _init];
     }
+    
     return self;
 }
+
 
 @end

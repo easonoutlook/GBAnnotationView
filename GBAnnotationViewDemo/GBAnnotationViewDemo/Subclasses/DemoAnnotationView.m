@@ -19,6 +19,8 @@ static UIWebView *_bomAd;
 @implementation DemoAnnotationView
 @dynamic standardPinImage;
 
+@synthesize leftCalloutAccessoryView = _leftCalloutAccessoryView;
+
 #pragma mark - Annotation on Map
 - (UIImage *)imageForAnnotation:(id<MKAnnotation>)annotation
 {
@@ -50,43 +52,104 @@ static UIWebView *_bomAd;
 
 #pragma mark - Annotation Callout Bubble
 #pragma mark leftCalloutAccessory
-- (UIView *)leftCalloutAccessoryView
-{
-    GBAnnotation *annotation = self.annotation;
-    UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(40.0, 60.0)];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    imageView.clipsToBounds = YES;
-    imageView.frame = CGRectMake(0, 0, 40, 40);
-    return imageView;
-}
+//- (UIView *)leftCalloutAccessoryView
+//{
+//    if (!_leftCalloutAccessoryView) {
+//        GBAnnotation *annotation = self.annotation;
+//        UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(40.0, 60.0)];
+//        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+//        imageView.clipsToBounds = YES;
+//        imageView.frame = CGRectMake(0, 0, 40, 40);
+//        _leftCalloutAccessoryView = imageView;
+//    }
+//    return _leftCalloutAccessoryView;
+//}
 
 
 #pragma mark bottomView
+//- (UIView *)bottomView
+//{
+//    if (!_bottomView) {
+//        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 160, 40)];
+//        bottomView.subject = self.annotation.title;
+//        bottomView.clipsToBounds = YES;
+//        bottomView.backgroundColor = [UIColor yellowColor];
+//        _bottomView = bottomView;
+//    }
+//    return _bottomView;
+//}
+//
+//- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    NSLog(@"TAPPP!!!!");
+//}
+
+- (UIView *)contentView
+{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 100)];
+        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
+    }
+    return _contentView;
+}
+
+//- (UIView *)rightAccessoryView
+//{
+//    if (!_rightAccessoryView) {
+//        _rightAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 10)];
+//        _rightAccessoryView.backgroundColor = [UIColor orangeColor];
+//    }
+//    return _rightAccessoryView;
+//}
+
+- (UIView *)leftCalloutAccessoryView
+{
+    if (!_leftCalloutAccessoryView) {
+        _leftCalloutAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 10)];
+        _leftCalloutAccessoryView.backgroundColor = [UIColor orangeColor];
+    }
+    return _leftCalloutAccessoryView;
+}
+
+//- (UIView *)topView
+//{
+//    if (!_topView) {
+//        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
+//        _topView.backgroundColor = [UIColor redColor];
+//    }
+//    return _topView;
+//}
+
+
 - (UIView *)bottomView
 {
     if (!_bottomView) {
-//        if (!_bomAd) {
-//            UIWebView *bottom = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 180, 15)];
-//            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://bigab.net/gb"]];
-//            [bottom loadRequest:request];
-//            bottom.backgroundColor = [UIColor clearColor];
-//            bottom.opaque = NO;
-//            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
-//            [bottom addGestureRecognizer:tap];
-//            _bomAd = bottom;
-//        }
-//        _bottomView = _bomAd;
-        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 180, 115)];
-        bottomView.subject = self.annotation.title;
-        _bottomView = bottomView;
+        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
+        _bottomView.backgroundColor = [UIColor blueColor];
     }
     return _bottomView;
 }
 
-- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
-{
-    NSLog(@"TAPPP!!!!");
-}
+
+//- (UIView *)headerView
+//{
+//    if (!_headerView) {
+//        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
+//        _headerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0];
+//    }
+//    return _headerView;
+//}
+//
+//
+//- (UIView *)footerView
+//{
+//    if (!_footerView) {
+//        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
+//        _footerView.backgroundColor = [UIColor yellowColor];
+//    }
+//    return _footerView;
+//}
+
 
 #pragma mark Callout Modifications
 - (CGPoint)calloutOffset

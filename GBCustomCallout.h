@@ -19,19 +19,6 @@ typedef enum {
     GBCustomCalloutArrowDirectionUp = 1UL << 1,
 } GBCustomCalloutArrowDirection;
 
-
-typedef enum {
-    GBCustomCalloutAlignmentCenterBottom,
-    GBCustomCalloutAlignmentCenterMiddle,
-    GBCustomCalloutAlignmentCenterTop,
-    GBCustomCalloutAlignmentLeftBottom,
-    GBCustomCalloutAlignmentLeftMiddle,
-    GBCustomCalloutAlignmentLeftTop,
-    GBCustomCalloutAlignmentRightBottom,
-    GBCustomCalloutAlignmentRightMiddle,
-    GBCustomCalloutAlignmentRightTop,
-} GBCustomCalloutAlignment;
-
 // options for the callout present/dismiss animation
 typedef enum {
     GBCustomCalloutAnimationBounce,
@@ -42,6 +29,7 @@ typedef enum {
 {}
 #pragma mark - Annotations
 @property (nonatomic, weak) MKAnnotationView *annotationView;
+@property (nonatomic, weak) MKMapView *mapView;
 
 #pragma mark - Delegates and Decision makers
 @property (nonatomic, weak) id<GBCustomCalloutViewDelegate> delegate;
@@ -49,16 +37,16 @@ typedef enum {
 
 #pragma mark - Subviews
 // Custom title/subtitle views. if these are set, the respective title/subtitle properties will be ignored.
-@property (nonatomic, retain) UIView *titleView, *subtitleView;
+@property (nonatomic, strong) UIView *titleView, *subtitleView;
 // Custom "content" view that can be any width/height. If this is set, title/subtitle/titleView/subtitleView are all ignored.
-@property (nonatomic, retain) UIView *contentView;
-@property (nonatomic, retain) UIView *leftAccessoryView;
-@property (nonatomic, retain) UIView *rightAccessoryView;
-@property (nonatomic, retain) UIView *headerView;
-@property (nonatomic, retain) UIView *footerView;
-@property (nonatomic, retain) UIView *topView;
-@property (nonatomic, retain) UIView *bottomView;
-@property (nonatomic, retain) UIView *backgroundView; //???: may change this - BigAB
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIView *leftAccessoryView;
+@property (nonatomic, strong) UIView *rightAccessoryView;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIView *footerView;
+@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIView *bottomView;
+@property (nonatomic, strong) UIView *backgroundView; //???: may change this - BigAB
 
 #pragma mark - Callout Modifications
 @property (nonatomic, assign) CGPoint offset;
