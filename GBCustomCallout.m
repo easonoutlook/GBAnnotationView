@@ -423,8 +423,6 @@
         self.leftAccessoryView = annotationView.leftCalloutAccessoryView;
     }
     
-    [self configureCalloutWithAnnotationView:annotationView mapView:mapView];
-    
     // need layout before positioning
     [self setNeedsLayout];
     [self layoutIfNeeded];
@@ -438,7 +436,7 @@
 - (void)configureCalloutWithAnnotationView:(MKAnnotationView *)annotationView
                                    mapView:(MKMapView *)mapView
 {
-    [self configureSubviews];
+    [self addSubviews];
     
     [self sizeToFit];
     self.constrainingRect = [self determineContraintRectWith:mapView inAnnotationView:annotationView];
@@ -543,7 +541,7 @@
 
 
 #pragma mark - Building Subviews
-- (void)configureSubviews
+- (void)addSubviews
 {
     [self addSubview:self.contentView];
     [self addSubview:self.topView];
@@ -589,6 +587,8 @@
     
     if (!self.annotationView) return;
     
+    [self configureCalloutWithAnnotationView:self.annotationView mapView:self.mapView];
+    
     CGRect layout = [self positionSubviewsRelativeToEachOther];
     CGFloat horzPadding = [self.horizontalPadding floatValue];
     CGFloat vertPadding = [self.verticalPadding floatValue];
@@ -601,6 +601,12 @@
     [self sendSubviewToBack:self.backgroundView];
     
     [self positionCalloutRelativeTo:self.annotationView];
+    
+    if (self.superview == self.annotationView && !self.hidden) {
+        if (![self isContainedByConstrainingRect]) {
+            [self moveMapToContainCalloutThen:nil];
+        }
+    }
 }
 
 
@@ -943,9 +949,11 @@
         [mapView setCenterCoordinate:newCenterCoordinate animated:YES];
     }
     
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), callback);
+    if (callback) {
+        double delayInSeconds = 0.1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), callback);
+    }
     
 }
 
