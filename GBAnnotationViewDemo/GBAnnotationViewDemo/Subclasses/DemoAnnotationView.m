@@ -52,18 +52,18 @@ static UIWebView *_bomAd;
 
 #pragma mark - Annotation Callout Bubble
 #pragma mark leftCalloutAccessory
-//- (UIView *)leftCalloutAccessoryView
-//{
-//    if (!_leftCalloutAccessoryView) {
-//        GBAnnotation *annotation = self.annotation;
-//        UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(40.0, 60.0)];
-//        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-//        imageView.clipsToBounds = YES;
-//        imageView.frame = CGRectMake(0, 0, 40, 40);
-//        _leftCalloutAccessoryView = imageView;
-//    }
-//    return _leftCalloutAccessoryView;
-//}
+- (UIView *)leftCalloutAccessoryView
+{
+    if (!_leftCalloutAccessoryView) {
+        GBAnnotation *annotation = self.annotation;
+        UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(40.0, 60.0)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.clipsToBounds = YES;
+        imageView.frame = CGRectMake(0, 0, 40, 40);
+        _leftCalloutAccessoryView = imageView;
+    }
+    return _leftCalloutAccessoryView;
+}
 
 
 #pragma mark bottomView
@@ -84,14 +84,14 @@ static UIWebView *_bomAd;
 //    NSLog(@"TAPPP!!!!");
 //}
 //
-//- (UIView *)contentView
-//{
-//    if (!_contentView) {
-//        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 100)];
-//        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
-//    }
-//    return _contentView;
-//}
+- (UIView *)contentView
+{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 30)];
+        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
+    }
+    return _contentView;
+}
 
 //- (UIView *)rightAccessoryView
 //{
@@ -102,14 +102,14 @@ static UIWebView *_bomAd;
 //    return _rightAccessoryView;
 //}
 
-- (UIView *)leftCalloutAccessoryView
-{
-    if (!_leftCalloutAccessoryView) {
-        _leftCalloutAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 10)];
-        _leftCalloutAccessoryView.backgroundColor = [UIColor orangeColor];
-    }
-    return _leftCalloutAccessoryView;
-}
+//- (UIView *)leftCalloutAccessoryView
+//{
+//    if (!_leftCalloutAccessoryView) {
+//        _leftCalloutAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 10)];
+//        _leftCalloutAccessoryView.backgroundColor = [UIColor orangeColor];
+//    }
+//    return _leftCalloutAccessoryView;
+//}
 
 //- (UIView *)topView
 //{

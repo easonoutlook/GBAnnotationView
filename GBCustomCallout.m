@@ -39,14 +39,8 @@
 @property (nonatomic, assign) GBCustomCalloutArrowDirection arrowDirection;
 @property (nonatomic, assign) CGPoint anchorPoint;
 
-// GROUPS for Layout
-@property (nonatomic, strong) NSArray *centerColumn;
-@property (nonatomic, strong) NSArray *middleRow;
-@property (nonatomic, strong) NSArray *lefter;
-@property (nonatomic, strong) NSArray *righter;
-@property (nonatomic, strong) NSArray *outliers;
-@property (nonatomic, strong) NSArray *upper;
-@property (nonatomic, strong) NSArray *downer;
+// A rect holder for Layout
+@property (nonatomic, assign) CGRect middleRowRect;
 
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryHeight;
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryWidth;
@@ -234,24 +228,6 @@
     }
     
     return _offset;
-}
-
-
-- (NSArray *)centerColumn
-{
-    return _centerColumn ? : (_centerColumn = [NSMutableArray new]);
-}
-
-
-- (NSArray *)middleRow
-{
-    return _middleRow ? : (_middleRow = [NSMutableArray new]);
-}
-
-
-- (NSArray *)outliers
-{
-    return _outliers ? : (_outliers = [NSMutableArray new]);
 }
 
 
@@ -571,6 +547,9 @@
         wrappingRect = [self rectFromAddingView:self.rightAccessoryView toRect:wrappingRect onEdge:CGRectMaxXEdge];
     }
     
+    // save the middle row rect for use in positioning later
+    self.middleRowRect = wrappingRect;
+    
     wrappingRect = [self rectFromAddingView:self.topView toRect:wrappingRect onEdge:CGRectMinYEdge];
     wrappingRect = [self rectFromAddingView:self.bottomView toRect:wrappingRect onEdge:CGRectMaxYEdge];
     
@@ -640,11 +619,11 @@
 {
     CGRect b = self.bounds;
     if (self.leftAccessoryView && self.shouldVerticallyCenterRightAccessory) {
-        CGRect boundingBox = self.shouldConstrainLeftAccessoryToContent ? self.contentView.frame : b;
+        CGRect boundingBox = self.shouldConstrainLeftAccessoryToContent ? self.middleRowRect : b;
         [self verticallyCenterView:self.leftAccessoryView inRect:boundingBox];
     }
     if (self.rightAccessoryView && self.shouldVerticallyCenterRightAccessory) {
-        CGRect boundingBox = self.shouldConstrainRightAccessoryToContent ? self.contentView.frame : b;
+        CGRect boundingBox = self.shouldConstrainRightAccessoryToContent ? self.middleRowRect : b;
         [self verticallyCenterView:self.rightAccessoryView inRect:boundingBox];
     }
     if (self.backgroundView) {
