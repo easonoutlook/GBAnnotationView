@@ -51,6 +51,16 @@ typedef enum {
 #pragma mark - Callout Modifications
 @property (nonatomic, assign) CGPoint offset;
 
+@property (nonatomic, strong) NSNumber *minWidthForLeftCallout, *minWidthForRightCallout, *maxWidthForLeftCallout, *maxWidthForRightCallout;
+// space between map border and callout (on automove)
+@property (nonatomic, strong) NSNumber *horizontalMargin, *verticalMargin;
+// space around the subviews
+@property (nonatomic, strong) NSNumber *horizontalPadding, *verticalPadding;
+// space inbetween the subviews
+@property (nonatomic, strong) NSNumber *subviewHorizontalMargin, *subviewVerticalMargin;
+// inset from which the arrow may appear under(/over) the callout
+@property (nonatomic, strong) NSNumber *anchorMargin;
+
 @property (nonatomic, assign) GBCustomCalloutAnimation presentAnimation, dismissAnimation; // default GBCalloutAnimationBounce, GBCalloutAnimationFade respectively
 
 #pragma mark - Class methods

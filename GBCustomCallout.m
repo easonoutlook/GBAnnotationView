@@ -21,9 +21,8 @@
 #define CALLOUT_MARGIN_HORZ         10
 #define CALLOUT_MARGIN_VERT         10
 
-#define SUBVIEW_PADDING             5
 #define SUBVIEW_HORZ_MARGIN         10
-#define SUBVIEW_VERT_MARGIN         20
+#define SUBVIEW_VERT_MARGIN         10
 
 #define ANCHOR_MARGIN               37
 
@@ -274,6 +273,70 @@
     return ([self.delegate respondsToSelector:@selector(shouldConstrainRightAccessoryToContent)] && [self.delegate shouldConstrainRightAccessoryToContent]);
 }
 
+// user defined layout adjustments
+- (NSNumber *)minWidthForLeftCallout
+{
+    return _minWidthForLeftCallout ?: (_minWidthForLeftCallout = [NSNumber numberWithFloat:MIN_WIDTH_FOR_LEFT_CALLOUT]);
+}
+
+
+- (NSNumber *)minWidthForRightCallout
+{
+    return _minWidthForRightCallout ?: (_minWidthForRightCallout = [NSNumber numberWithFloat:MIN_WIDTH_FOR_RIGHT_CALLOUT]);
+}
+
+
+- (NSNumber *)maxWidthForLeftCallout
+{
+    return _maxWidthForLeftCallout ?: (_maxWidthForLeftCallout = [NSNumber numberWithFloat:MAX_WIDTH_FOR_LEFT_CALLOUT]);
+}
+
+
+- (NSNumber *)maxWidthForRightCallout
+{
+    return _maxWidthForRightCallout ?: (_maxWidthForRightCallout = [NSNumber numberWithFloat:MAX_WIDTH_FOR_RIGHT_CALLOUT]);
+}
+
+
+- (NSNumber *)horizontalPadding
+{
+    return _horizontalPadding ?: (_horizontalPadding = [NSNumber numberWithFloat:CALLOUT_HORZ_PADDING]);
+}
+
+
+- (NSNumber *)verticalPadding
+{
+    return _verticalPadding ?: (_verticalPadding = [NSNumber numberWithFloat:CALLOUT_VERT_PADDING]);
+}
+
+
+- (NSNumber *)horizontalMargin
+{
+    return _horizontalMargin ?: (_horizontalMargin = [NSNumber numberWithFloat:CALLOUT_MARGIN_HORZ]);
+}
+
+
+- (NSNumber *)verticalMargin
+{
+    return _verticalMargin ?: (_verticalMargin = [NSNumber numberWithFloat:CALLOUT_MARGIN_VERT]);
+}
+
+
+- (NSNumber *)subviewHorizontalMargin
+{
+    return _subviewHorizontalMargin ?: (_subviewHorizontalMargin = [NSNumber numberWithFloat:SUBVIEW_HORZ_MARGIN]);
+}
+
+
+- (NSNumber *)subviewVerticalMargin
+{
+    return _subviewVerticalMargin ?: (_subviewVerticalMargin = [NSNumber numberWithFloat:SUBVIEW_VERT_MARGIN]);
+}
+
+- (NSNumber *)anchorMargin
+{
+    return _anchorMargin ?: (_anchorMargin = [NSNumber numberWithFloat:ANCHOR_MARGIN]);
+}
 
 #pragma mark - Class methods
 + (GBCustomCallout *)customCalloutWithDelegate:(id <GBCustomCalloutViewDelegate> )delegate
@@ -444,8 +507,8 @@
     self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
     // scoot to the left or right if not wide enough for arrow to point
-    CGFloat minPointX = CGRectGetMinX(self.frame) + ANCHOR_MARGIN;
-    CGFloat maxPointX = CGRectGetMaxX(self.frame) - ANCHOR_MARGIN;
+    CGFloat minPointX = CGRectGetMinX(self.frame) + [self.anchorMargin floatValue];
+    CGFloat maxPointX = CGRectGetMaxX(self.frame) - [self.anchorMargin floatValue];
     
     CGFloat adjustX = 0;
     
@@ -527,7 +590,9 @@
     if (!self.annotationView) return;
     
     CGRect layout = [self positionSubviewsRelativeToEachOther];
-    layout = CGRectInset(layout, -CALLOUT_HORZ_PADDING, -CALLOUT_VERT_PADDING);
+    CGFloat horzPadding = [self.horizontalPadding floatValue];
+    CGFloat vertPadding = [self.verticalPadding floatValue];
+    layout = CGRectInset(layout, -horzPadding, -vertPadding);
     self.bounds = layout;
     
     [self positionSubviewsRelativeToCallout];
@@ -584,19 +649,21 @@
 
 - (CGPoint)originForView:(UIView *)view inRect:(CGRect)rect forEdge:(CGRectEdge)edge
 {
+    CGFloat horzMargin = [self.subviewHorizontalMargin floatValue];
+    CGFloat vertMargin = [self.subviewVerticalMargin floatValue];
     CGPoint origin;
     switch (edge) {
         case CGRectMinXEdge:
-            origin = CGPointMake(-(CGRectGetWidth(view.frame) + SUBVIEW_HORZ_MARGIN), 0);
+            origin = CGPointMake(-(CGRectGetWidth(view.frame) + horzMargin), 0);
             break;
         case CGRectMaxXEdge:
-            origin = CGPointMake(CGRectGetMaxX(rect) + SUBVIEW_HORZ_MARGIN, 0);
+            origin = CGPointMake(CGRectGetMaxX(rect) + horzMargin, 0);
             break;
         case CGRectMinYEdge:
-            origin = CGPointMake(CGRectGetMinX(rect), -(CGRectGetHeight(view.frame) + SUBVIEW_VERT_MARGIN));
+            origin = CGPointMake(CGRectGetMinX(rect), -(CGRectGetHeight(view.frame) + vertMargin));
             break;
         case CGRectMaxYEdge:
-            origin = CGPointMake(CGRectGetMinX(rect), CGRectGetMaxY(rect) + SUBVIEW_HORZ_MARGIN);
+            origin = CGPointMake(CGRectGetMinX(rect), CGRectGetMaxY(rect) + vertMargin);
             break;
             
         default:
@@ -840,14 +907,18 @@
 
 - (BOOL)isContainedByConstrainingRect
 {
-    return CGRectContainsRect(CGRectInset(self.constrainingRect, CALLOUT_MARGIN_HORZ, CALLOUT_MARGIN_VERT), self.frame);
+    CGFloat horzMargin = [self.horizontalMargin floatValue];
+    CGFloat vertMargin = [self.verticalMargin floatValue];
+    return CGRectContainsRect(CGRectInset(self.constrainingRect, horzMargin, vertMargin), self.frame);
 }
 
 
 - (void)moveMapToContainCalloutThen:(void (^)(void))callback
 {
+    CGFloat horzMargin = [self.horizontalMargin floatValue];
+    CGFloat vertMargin = [self.verticalMargin floatValue];
     if (self.mapView) {
-        CGRect contrainingRect = CGRectInset(self.constrainingRect, CALLOUT_MARGIN_HORZ, CALLOUT_MARGIN_VERT);
+        CGRect contrainingRect = CGRectInset(self.constrainingRect, horzMargin, vertMargin);
         CGPoint offset = [self offsetToContainRect:self.frame
                                             inRect:contrainingRect];
         [self moveMapByOffset:offset then:callback];

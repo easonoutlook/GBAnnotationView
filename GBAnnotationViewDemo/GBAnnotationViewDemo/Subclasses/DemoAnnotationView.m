@@ -20,6 +20,7 @@ static UIView *_bomAd;
 @dynamic standardPinImage;
 
 @synthesize leftCalloutAccessoryView = _leftCalloutAccessoryView;
+@synthesize calloutView = _calloutView;
 
 #pragma mark - Annotation on Map
 - (UIImage *)imageForAnnotation:(id<MKAnnotation>)annotation
@@ -51,6 +52,17 @@ static UIView *_bomAd;
 
 
 #pragma mark - Annotation Callout Bubble
+- (GBCustomCallout *)calloutView
+{
+    if (!_calloutView) {
+        _calloutView = [GBCustomCallout new];
+        _calloutView.delegate = self;
+        _calloutView.verticalPadding = @10;
+    }
+    
+    return _calloutView;
+}
+
 #pragma mark leftCalloutAccessory
 - (UIView *)leftCalloutAccessoryView
 {

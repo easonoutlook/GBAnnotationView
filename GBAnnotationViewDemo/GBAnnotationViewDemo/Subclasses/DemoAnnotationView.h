@@ -10,7 +10,9 @@
 
 @interface DemoAnnotationView : GBAnnotationView <GBCustomCalloutViewDelegate, UIGestureRecognizerDelegate>
 
+@property (strong, nonatomic) GBCustomCallout *calloutView;
 @property (nonatomic, strong) UIView *leftCalloutAccessoryView;
+
 //@property (nonatomic, strong) UIView *rightAccessoryView;
 //@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *bottomView;
