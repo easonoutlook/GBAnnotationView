@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) UIView *leftCalloutAccessoryView;
 //@property (nonatomic, strong) UIView *rightAccessoryView;
-@property (nonatomic, strong) UIView *contentView;
+//@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *bottomView;
 //@property (nonatomic, strong) UIView *topView;
 //@property (nonatomic, strong) UIView *headerView;
@@ -21,8 +21,8 @@
 //- (BOOL)shouldExpandToAccessoryHeight;
 //- (BOOL)shouldExpandToAccessoryWidth;
 
-//- (BOOL)shouldVerticallyCenterLeftAccessoryToContent;
-//- (BOOL)shouldVerticallyCenterRightAccessoryToContent;
+//- (BOOL)shouldVerticallyCenterLeftAccessory;
+//- (BOOL)shouldVerticallyCenterRightAccessory;
 
 - (BOOL)shouldConstrainLeftAccessoryToContent;
 //- (BOOL)shouldConstrainRightAccessoryToContent;

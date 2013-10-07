@@ -93,8 +93,8 @@ typedef enum {
 
 - (BOOL)shouldExpandToAccessoryHeight;
 - (BOOL)shouldExpandToAccessoryWidth;
-- (BOOL)shouldVerticallyCenterLeftAccessoryToContent;
-- (BOOL)shouldVerticallyCenterRightAccessoryToContent;
+- (BOOL)shouldVerticallyCenterLeftAccessory;
+- (BOOL)shouldVerticallyCenterRightAccessory;
 - (BOOL)shouldConstrainLeftAccessoryToContent;
 - (BOOL)shouldConstrainRightAccessoryToContent;
 

@@ -39,9 +39,14 @@
 @property (nonatomic, assign) GBCustomCalloutArrowDirection arrowDirection;
 @property (nonatomic, assign) CGPoint anchorPoint;
 
+// GROUPS for Layout
 @property (nonatomic, strong) NSArray *centerColumn;
 @property (nonatomic, strong) NSArray *middleRow;
+@property (nonatomic, strong) NSArray *lefter;
+@property (nonatomic, strong) NSArray *righter;
 @property (nonatomic, strong) NSArray *outliers;
+@property (nonatomic, strong) NSArray *upper;
+@property (nonatomic, strong) NSArray *downer;
 
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryHeight;
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryWidth;
@@ -264,17 +269,21 @@
 }
 
 
-- (BOOL)shouldVerticallyCenterLeftAccessoryToContent
+- (BOOL)shouldVerticallyCenterLeftAccessory
 {
-    BOOL should = ([self.delegate respondsToSelector:@selector(shouldVerticallyCenterLeftAccessoryToContent)] && [self.delegate shouldVerticallyCenterLeftAccessoryToContent]);
+    BOOL should = ([self.delegate respondsToSelector:@selector(shouldVerticallyCenterLeftAccessory)] && [self.delegate shouldVerticallyCenterLeftAccessory]);
     
     return should;
 }
 
 
-- (BOOL)shouldVerticallyCenterRightAccessoryToContent
+- (BOOL)shouldVerticallyCenterRightAccessory
 {
-    return ([self.delegate respondsToSelector:@selector(shouldVerticallyCenterRightAccessoryToContent)] && [self.delegate shouldVerticallyCenterRightAccessoryToContent]);
+    if ([self.delegate respondsToSelector:@selector(shouldVerticallyCenterRightAccessory)]) {
+        return [self.delegate shouldVerticallyCenterRightAccessory];
+    }
+    
+    return YES;
 }
 
 
@@ -492,25 +501,14 @@
 #pragma mark - Building Subviews
 - (void)configureSubviews
 {
-    NSMutableArray *centerColumn = [NSMutableArray new];
-    
-    [self addSubview:self.topView toGroup:centerColumn];
-    [self addSubview:self.contentView toGroup:centerColumn];
-    [self addSubview:self.bottomView toGroup:centerColumn];
-    
-    NSMutableArray *middleRow = [NSMutableArray new];
-    [self addSubview:self.leftAccessoryView toGroup:middleRow];
-    [self addSubview:self.rightAccessoryView toGroup:middleRow];
-    
-    NSMutableArray *outliers = [NSMutableArray new];
-    [self addSubview:self.headerView toGroup:outliers];
-    [self addSubview:self.footerView toGroup:outliers];
-    
+    [self addSubview:self.contentView];
+    [self addSubview:self.topView];
+    [self addSubview:self.bottomView];
+    [self addSubview:self.leftAccessoryView];
+    [self addSubview:self.rightAccessoryView];
+    [self addSubview:self.headerView];
+    [self addSubview:self.footerView];
     [self addSubview:self.backgroundView];
-    
-    self.centerColumn = centerColumn;
-    self.middleRow = middleRow;
-    self.outliers = outliers;
 }
 
 
@@ -532,17 +530,17 @@
     /*
      ------------------------------------------
      |             Header View                |
-     |||________________________________________|
+     |________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     |||Access..|      - titleView   |Accessor..|
+     |Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     |||________________________________________|
+     |________________________________________|
      */
     
     if (!self.annotationView) return;
@@ -560,52 +558,65 @@
 
 - (CGRect)positionSubviewsRelativeToEachOther
 {
-    __block CGRect wrappingRect = CGRectZero;
-    __block CGFloat y = 0.0;
+    CGSize contentSize = self.contentView.frame.size;
+    __block CGRect wrappingRect = CGRectMake(0, 0, contentSize.width, contentSize.height);
     
-    [self.centerColumn
-     enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
-         wrappingRect = [self wrappingRect:wrappingRect
-                     forPositioningSubview:subview
-                                   atPoint:CGPointMake(0, y)];
-         y = CGRectGetMaxY(wrappingRect) + SUBVIEW_VERT_MARGIN;
-     }];
+    self.contentView.frame = wrappingRect;
     
-    [self.middleRow
-     enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
-         CGPoint point;
-         
-         if (subview == self.leftAccessoryView) {
-             point = CGPointMake(-(CGRectGetWidth(subview.frame) + SUBVIEW_HORZ_MARGIN), 0);
-         }
-         
-         if (subview == self.rightAccessoryView) {
-             point = CGPointMake(CGRectGetMaxX(wrappingRect) + SUBVIEW_HORZ_MARGIN, 0);
-         }
-         
-         wrappingRect = [self wrappingRect:wrappingRect
-                     forPositioningSubview:subview
-                                   atPoint:point];
-     }];
+    // add left/right now if constrained
+    if (self.shouldConstrainLeftAccessoryToContent) {
+        wrappingRect = [self rectFromAddingView:self.leftAccessoryView toRect:wrappingRect onEdge:CGRectMinXEdge];
+    }
+    if (self.shouldConstrainRightAccessoryToContent) {
+        wrappingRect = [self rectFromAddingView:self.rightAccessoryView toRect:wrappingRect onEdge:CGRectMaxXEdge];
+    }
     
-    [self.outliers
-     enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
-         CGPoint point;
-         
-         if (subview == self.headerView) {
-             point = CGPointMake(CGRectGetMinX(wrappingRect), -(CGRectGetHeight(subview.frame) + SUBVIEW_VERT_MARGIN));
-         }
-         
-         if (subview == self.footerView) {
-             point = CGPointMake(CGRectGetMinX(wrappingRect), CGRectGetMaxY(wrappingRect) + SUBVIEW_VERT_MARGIN);
-         }
-         
-         wrappingRect = [self wrappingRect:wrappingRect
-                     forPositioningSubview:subview
-                                   atPoint:point];
-     }];
+    wrappingRect = [self rectFromAddingView:self.topView toRect:wrappingRect onEdge:CGRectMinYEdge];
+    wrappingRect = [self rectFromAddingView:self.bottomView toRect:wrappingRect onEdge:CGRectMaxYEdge];
+    
+    // add left/right after top and bottom if not constrained
+    if ( !self.shouldConstrainLeftAccessoryToContent ) {
+        wrappingRect = [self rectFromAddingView:self.leftAccessoryView toRect:wrappingRect onEdge:CGRectMinXEdge];
+    }
+    if ( !self.shouldConstrainRightAccessoryToContent ) {
+        wrappingRect = [self rectFromAddingView:self.rightAccessoryView toRect:wrappingRect onEdge:CGRectMaxXEdge];
+    }
+    
+    wrappingRect = [self rectFromAddingView:self.headerView toRect:wrappingRect onEdge:CGRectMinYEdge];
+    wrappingRect = [self rectFromAddingView:self.footerView toRect:wrappingRect onEdge:CGRectMaxYEdge];
     
     return wrappingRect;
+}
+
+- (CGRect)rectFromAddingView:(UIView *)view toRect:(CGRect)rect onEdge:(CGRectEdge)edge
+{
+    if (!view) return rect;
+    
+    CGPoint origin = [self originForView:view inRect:rect forEdge:edge];
+    return [self wrappingRect:rect forPositioningSubview:view atPoint:origin];
+}
+
+- (CGPoint)originForView:(UIView *)view inRect:(CGRect)rect forEdge:(CGRectEdge)edge
+{
+    CGPoint origin;
+    switch (edge) {
+        case CGRectMinXEdge:
+            origin = CGPointMake(-(CGRectGetWidth(view.frame) + SUBVIEW_HORZ_MARGIN), 0);
+            break;
+        case CGRectMaxXEdge:
+            origin = CGPointMake(CGRectGetMaxX(rect) + SUBVIEW_HORZ_MARGIN, 0);
+            break;
+        case CGRectMinYEdge:
+            origin = CGPointMake(CGRectGetMinX(rect), -(CGRectGetHeight(view.frame) + SUBVIEW_VERT_MARGIN));
+            break;
+        case CGRectMaxYEdge:
+            origin = CGPointMake(CGRectGetMinX(rect), CGRectGetMaxY(rect) + SUBVIEW_HORZ_MARGIN);
+            break;
+            
+        default:
+            break;
+    }
+    return origin;
 }
 
 
@@ -628,11 +639,13 @@
 - (void)positionSubviewsRelativeToCallout
 {
     CGRect b = self.bounds;
-    if (self.leftAccessoryView) {
-        [self verticallyCenterView:self.leftAccessoryView inRect:b];
+    if (self.leftAccessoryView && self.shouldVerticallyCenterRightAccessory) {
+        CGRect boundingBox = self.shouldConstrainLeftAccessoryToContent ? self.contentView.frame : b;
+        [self verticallyCenterView:self.leftAccessoryView inRect:boundingBox];
     }
-    if (self.rightAccessoryView) {
-        [self verticallyCenterView:self.rightAccessoryView inRect:b];
+    if (self.rightAccessoryView && self.shouldVerticallyCenterRightAccessory) {
+        CGRect boundingBox = self.shouldConstrainRightAccessoryToContent ? self.contentView.frame : b;
+        [self verticallyCenterView:self.rightAccessoryView inRect:boundingBox];
     }
     if (self.backgroundView) {
         self.backgroundView.frame = b;
@@ -641,9 +654,8 @@
 
 - (void)verticallyCenterView:(UIView *)view inRect:(CGRect)rect
 {
-    CGRect f = view.frame;
-    f.origin = CGPointMake(f.origin.x, CGRectGetMidY(rect));
-    view.frame = f;
+    CGPoint c = view.center;
+    view.center = CGPointMake(c.x, CGRectGetMidY(rect));
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
@@ -986,9 +998,9 @@
     /*
      ------------------------------------------
      | Title                                  |
-     |||________________________________________|
+     |________________________________________|
      | Subtitle                               |
-     |||________________________________________|
+     |________________________________________|
      */
     __block CGFloat y = 0;
     

@@ -83,15 +83,15 @@ static UIWebView *_bomAd;
 //{
 //    NSLog(@"TAPPP!!!!");
 //}
-
-- (UIView *)contentView
-{
-    if (!_contentView) {
-        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 100)];
-        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
-    }
-    return _contentView;
-}
+//
+//- (UIView *)contentView
+//{
+//    if (!_contentView) {
+//        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 100)];
+//        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
+//    }
+//    return _contentView;
+//}
 
 //- (UIView *)rightAccessoryView
 //{
@@ -124,7 +124,7 @@ static UIWebView *_bomAd;
 - (UIView *)bottomView
 {
     if (!_bottomView) {
-        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
+        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
         _bottomView.backgroundColor = [UIColor blueColor];
     }
     return _bottomView;
@@ -162,6 +162,17 @@ static UIWebView *_bomAd;
 {
     return self.bottomView ? YES : NO;
 }
+
+//- (BOOL)shouldVerticallyCenterLeftAccessory
+//{
+//    return YES;
+//}
+//
+//
+//- (BOOL)shouldVerticallyCenterRightAccessory
+//{
+//    return YES;
+//}
 
 #pragma mark - Utility
 - (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize
