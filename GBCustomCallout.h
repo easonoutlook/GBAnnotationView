@@ -98,8 +98,6 @@ typedef enum {
 - (BOOL)shouldConstrainLeftAccessoryToContent;
 - (BOOL)shouldConstrainRightAccessoryToContent;
 
-- (void)moveMapByOffset:(CGPoint)offset then:(void(^)(void))callback;
-
 @end
 
 #pragma mark - ***** Helper CLASSES ***** -

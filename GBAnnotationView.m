@@ -148,26 +148,4 @@ static UIView *_rightCalloutAccessoryView;
     return self.rightCalloutAccessoryView;
 }
 
-- (void)moveMapByOffset:(CGPoint)offset then:(void(^)(void))callback
-{
-    MKMapView *mapView = self.mapView;
-    CGFloat pixelsPerDegreeLat = mapView.frame.size.height / mapView.region.span.latitudeDelta;
-    CGFloat pixelsPerDegreeLon = mapView.frame.size.width / mapView.region.span.longitudeDelta;
-    
-    CLLocationDegrees latitudinalShift = offset.y / pixelsPerDegreeLat;
-    CLLocationDegrees longitudinalShift = -(offset.x / pixelsPerDegreeLon);
-    
-    CGFloat lat = mapView.region.center.latitude + latitudinalShift;
-    CGFloat lon = mapView.region.center.longitude + longitudinalShift;
-    CLLocationCoordinate2D newCenterCoordinate = (CLLocationCoordinate2D){lat, lon};
-    if (fabsf(newCenterCoordinate.latitude) <= 90 && fabsf(newCenterCoordinate.longitude <= 180)) {
-        [mapView setCenterCoordinate:newCenterCoordinate animated:YES];
-    }
-    
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), callback);
-    
-}
-
 @end
