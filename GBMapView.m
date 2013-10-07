@@ -13,7 +13,8 @@
 
 #pragma mark - MKMapView Category
 @interface MKMapView (UIGestureRecognizer)
-
+// this tells the compiler that MKMapView actually implements this method
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;
 @end
 
 #pragma mark - GBMapView
@@ -121,7 +122,6 @@
 {
     return NO;
 }
-
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(GBAnnotationView *)annotationView
 {

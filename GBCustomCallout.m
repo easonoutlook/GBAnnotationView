@@ -15,15 +15,15 @@
 #define MAX_WIDTH_FOR_LEFT_CALLOUT  40
 #define MAX_WIDTH_FOR_RIGHT_CALLOUT 40
 
-#define CALLOUT_HORZ_PADDING        5
-#define CALLOUT_VERT_PADDING        5
+#define CALLOUT_HORZ_PADDING        10
+#define CALLOUT_VERT_PADDING        10
 
 #define CALLOUT_MARGIN_HORZ         10
 #define CALLOUT_MARGIN_VERT         10
 
 #define SUBVIEW_PADDING             5
-#define SUBVIEW_HORZ_MARGIN         5
-#define SUBVIEW_VERT_MARGIN         5
+#define SUBVIEW_HORZ_MARGIN         10
+#define SUBVIEW_VERT_MARGIN         20
 
 #define ANCHOR_MARGIN               37
 
@@ -301,6 +301,11 @@
         tap.delegate = self;
         [self addGestureRecognizer:tap];
     }
+    // just to stop the map zoom on doubleTaps when tapping the callout
+    UITapGestureRecognizer *dtap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    dtap.numberOfTapsRequired = 2;
+    dtap.delegate = self;
+    [self addGestureRecognizer:dtap];
 }
 
 
@@ -360,7 +365,7 @@
     // need layout before positioning
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    [self positionCalloutRelativeTo:annotationView];
+    
     
     [self addCalloutToAnnotationView:annotationView];
     [self animateIn];
@@ -529,6 +534,8 @@
     
     [self bringSubviewToFront:self.contentView];
     [self sendSubviewToBack:self.backgroundView];
+    
+    [self positionCalloutRelativeTo:self.annotationView];
 }
 
 
@@ -653,7 +660,6 @@
         [view sizeToFit];
     }
 }
-
 
 #pragma mark - Animate callout in/out
 - (void)animateIn
@@ -864,6 +870,11 @@
 - (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
     [self activate];
+}
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer
+{
+    NSLog(@"DoubleTapped!");
 }
 
 

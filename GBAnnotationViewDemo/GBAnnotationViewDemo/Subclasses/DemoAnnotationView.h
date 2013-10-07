@@ -8,11 +8,11 @@
 
 #import "GBAnnotationView.h"
 
-@interface DemoAnnotationView : GBAnnotationView <GBCustomCalloutViewDelegate>
+@interface DemoAnnotationView : GBAnnotationView <GBCustomCalloutViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIView *leftCalloutAccessoryView;
 //@property (nonatomic, strong) UIView *rightAccessoryView;
-@property (nonatomic, strong) UIView *contentView;
+//@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *bottomView;
 //@property (nonatomic, strong) UIView *topView;
 //@property (nonatomic, strong) UIView *headerView;

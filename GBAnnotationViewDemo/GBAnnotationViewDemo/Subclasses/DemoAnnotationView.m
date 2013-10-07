@@ -10,7 +10,7 @@
 #import "GBAnnotation.h"
 #import "GBRelatedInformationView.h"
 
-static UIWebView *_bomAd;
+static UIView *_bomAd;
 
 @interface DemoAnnotationView ()
 @property (nonatomic, readonly) UIImage *standardPinImage;
@@ -79,19 +79,55 @@ static UIWebView *_bomAd;
 //    return _bottomView;
 //}
 //
-//- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
-//{
-//    NSLog(@"TAPPP!!!!");
-//}
 //
-- (UIView *)contentView
+//- (UIView *)bottomView
+//{
+//    if (!_bottomView) {
+//        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
+//        _bottomView.backgroundColor = [UIColor blueColor];
+//        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
+//        [_bottomView addGestureRecognizer:tap];
+//    }
+//    return _bottomView;
+//}
+
+- (UIView *)bottomView
 {
-    if (!_contentView) {
-        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 30)];
-        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
+    if (!_bomAd) {
+        _bomAd = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
+        _bomAd.backgroundColor = [UIColor blueColor];
+        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
+        tap.delegate = self;
+        [_bomAd addGestureRecognizer:tap];
     }
-    return _contentView;
+    return _bomAd;
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
+}
+
+- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
+{
+    UIView *view = gestureRecognizer.view;
+    CGRect f = view.frame;
+    
+    int r = arc4random() % 50;
+    int spread = (f.size.height == 20) ? 0 : 25;
+    f.size = CGSizeMake(f.size.width, MAX(20, f.size.height + (r-spread)));
+    
+    view.frame = f;
+}
+//
+//- (UIView *)contentView
+//{
+//    if (!_contentView) {
+//        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 180, 30)];
+//        _contentView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.2];
+//    }
+//    return _contentView;
+//}
 
 //- (UIView *)rightAccessoryView
 //{
@@ -101,7 +137,7 @@ static UIWebView *_bomAd;
 //    }
 //    return _rightAccessoryView;
 //}
-
+//
 //- (UIView *)leftCalloutAccessoryView
 //{
 //    if (!_leftCalloutAccessoryView) {
@@ -110,7 +146,7 @@ static UIWebView *_bomAd;
 //    }
 //    return _leftCalloutAccessoryView;
 //}
-
+//
 //- (UIView *)topView
 //{
 //    if (!_topView) {
@@ -119,18 +155,8 @@ static UIWebView *_bomAd;
 //    }
 //    return _topView;
 //}
-
-
-- (UIView *)bottomView
-{
-    if (!_bottomView) {
-        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
-        _bottomView.backgroundColor = [UIColor blueColor];
-    }
-    return _bottomView;
-}
-
-
+//
+//
 //- (UIView *)headerView
 //{
 //    if (!_headerView) {
