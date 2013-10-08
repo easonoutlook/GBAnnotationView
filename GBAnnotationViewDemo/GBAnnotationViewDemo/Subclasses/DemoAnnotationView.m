@@ -159,34 +159,34 @@ static UIView *_bomAd;
 //    return _leftCalloutAccessoryView;
 //}
 //
-//- (UIView *)topView
-//{
-//    if (!_topView) {
-//        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
-//        _topView.backgroundColor = [UIColor redColor];
-//    }
-//    return _topView;
-//}
-//
-//
-//- (UIView *)headerView
-//{
-//    if (!_headerView) {
-//        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
-//        _headerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0];
-//    }
-//    return _headerView;
-//}
-//
-//
-//- (UIView *)footerView
-//{
-//    if (!_footerView) {
-//        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
-//        _footerView.backgroundColor = [UIColor yellowColor];
-//    }
-//    return _footerView;
-//}
+- (UIView *)topView
+{
+    if (!_topView) {
+        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
+        _topView.backgroundColor = [UIColor redColor];
+    }
+    return _topView;
+}
+
+
+- (UIView *)headerView
+{
+    if (!_headerView) {
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
+        _headerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0];
+    }
+    return _headerView;
+}
+
+
+- (UIView *)footerView
+{
+    if (!_footerView) {
+        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
+        _footerView.backgroundColor = [UIColor yellowColor];
+    }
+    return _footerView;
+}
 
 
 #pragma mark Callout Modifications
