@@ -12,7 +12,7 @@
 
 #define CORNER_RADIUS               10.0
 #define ARROW_HEIGHT                20.0
-#define ARROW_WIDTH                 20.0
+#define ARROW_WIDTH                 30.0
 
 #define MIN_WIDTH_FOR_LEFT_CALLOUT  40.0
 #define MIN_WIDTH_FOR_RIGHT_CALLOUT 30.0
@@ -49,6 +49,10 @@ typedef void (^Callback)();
 @property (nonatomic, assign, readonly) BOOL shouldExpandToAccessoryWidth;
 @property (nonatomic, assign, readonly) BOOL shouldVerticallyCenterLeftToContent;
 @property (nonatomic, assign, readonly) BOOL shouldVerticallyCenterRightToContent;
+
+// for the bubble shape
+@property (nonatomic, strong) CALayer *maskLayer;
+@property (nonatomic, strong) CAShapeLayer *arrowLayer;
 
 @end
 
@@ -216,6 +220,22 @@ typedef void (^Callback)();
     return _offset;
 }
 
+- (CALayer *)maskLayer
+{
+    if (!_maskLayer) {
+        _maskLayer = [CALayer layer];
+        _maskLayer.cornerRadius = CORNER_RADIUS;
+        _maskLayer.backgroundColor = [[UIColor colorWithWhite:0.5 alpha:1] CGColor];
+    }
+    return _maskLayer;
+}
+
+
+- (CAShapeLayer *)arrowLayer
+{
+    return _arrowLayer ?: (_arrowLayer = [CAShapeLayer layer]);
+}
+
 
 - (BOOL)shouldExpandToAccessoryHeight
 {
@@ -341,6 +361,7 @@ typedef void (^Callback)();
 #pragma mark - Initialization
 - (void)_init
 {
+    self.backgroundColor = [UIColor whiteColor];
     self.autoresizesSubviews = NO;
     self.autoresizingMask = UIViewAutoresizingNone;
     self.presentAnimation = GBCustomCalloutAnimationBounce;
@@ -472,7 +493,7 @@ typedef void (^Callback)();
     }
     
     // 4. Make Bubble Shape
-    //[self addBubbleMask];
+    [self addBubbleMask];
 }
 
 
@@ -498,10 +519,8 @@ typedef void (^Callback)();
     [self addSubview:self.rightAccessoryView];
     [self addSubview:self.headerView];
     [self addSubview:self.footerView];
-    [self addSubview:self.backgroundView];
     
     [self bringSubviewToFront:self.contentView];
-    [self sendSubviewToBack:self.backgroundView];
 }
 
 - (CGRect)determineContraintRectWith:(MKMapView *)mapView
@@ -687,7 +706,7 @@ typedef void (^Callback)();
     self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
     // scoot to the left or right if not wide enough for arrow to point
-    CGFloat minPointX = CGRectGetMinX(self.frame) + [self.anchorMargin floatValue];
+    CGFloat minPointX = CGRectGetMinX(self.frame) - [self.anchorMargin floatValue];
     CGFloat maxPointX = CGRectGetMaxX(self.frame) - [self.anchorMargin floatValue];
     
     CGFloat adjustX = 0;
@@ -723,27 +742,39 @@ typedef void (^Callback)();
 - (void)addBubbleMask
 {
     CGRect b = self.layer.bounds;
-    CGPoint anchorPoint = [self.layer convertPoint:self.annotationAnchorPoint fromLayer:self.annotationView.layer];
-    NSLog(@"POINT: %@", [NSValue valueWithCGPoint:anchorPoint]);
     
-    CALayer *maskLayer = [CALayer layer];
-    maskLayer.frame = CGRectMake(b.origin.x, b.origin.y, b.size.width, b.size.height-ARROW_HEIGHT);
-    maskLayer.cornerRadius = CORNER_RADIUS;
-    maskLayer.backgroundColor = [[UIColor colorWithWhite:0 alpha:1] CGColor];
+    self.maskLayer.frame = b;
     
-    CAShapeLayer *arrowLayer = [CAShapeLayer layer];
-    arrowLayer.name = @"CalloutArrow";
-    arrowLayer.frame = CGRectMake(0, CGRectGetMaxY(maskLayer.bounds), ARROW_WIDTH, ARROW_HEIGHT);
-    CGMutablePathRef path = [self trianglePathForRect:arrowLayer.bounds];
-    arrowLayer.path = path;
+    CGPoint anchorPoint = [self.annotationView convertPoint:self.annotationAnchorPoint toView:self];
+    CGPoint point = CGPointMake(anchorPoint.x - CGRectGetMinX(b), CGRectGetHeight(b));
+
+    [self addArrowLayer:self.arrowLayer toMaskLayer:self.maskLayer atPoint:point];
     
-    CGPoint arrowPoint = [maskLayer convertPoint:anchorPoint fromLayer:self.layer];
-    arrowLayer.frame = CGRectOffset(arrowLayer.frame, arrowPoint.x, 0);
-    
+    self.layer.mask = self.maskLayer;
+}
+
+
+- (void)addArrowLayer:(CAShapeLayer *)arrowLayer toMaskLayer:(CALayer *)maskLayer atPoint:(CGPoint)point
+{
+    arrowLayer.frame = CGRectMake(point.x, point.y, ARROW_WIDTH, ARROW_HEIGHT);
+    [self configureArrowLayer:arrowLayer];
     [maskLayer addSublayer:arrowLayer];
     
-    [self.layer addSublayer:maskLayer];
-    //    self.layer.mask = maskLayer;
+    [self increaseViewSizeToEnvelopeArrow];
+}
+
+
+- (void)configureArrowLayer:(CAShapeLayer *)arrowLayer
+{
+    CGMutablePathRef path = [self trianglePathForRect:arrowLayer.bounds];
+    arrowLayer.path = path;
+}
+
+
+- (void)increaseViewSizeToEnvelopeArrow
+{
+    CGRect b = self.layer.bounds;
+    self.bounds = CGRectMake(b.origin.x, b.origin.y, b.size.width, b.size.height + ARROW_HEIGHT);
 }
 
 
