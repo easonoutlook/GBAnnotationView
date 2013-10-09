@@ -41,6 +41,7 @@ typedef void (^Callback)();
 @property (nonatomic, assign) CGRect constrainingRect;
 @property (nonatomic, assign) GBCustomCalloutArrowDirection arrowDirection;
 @property (nonatomic, assign) CGPoint annotationAnchorPoint;
+@property (nonatomic, strong) UIColor *inactiveBackgroundColor;
 
 // A rect holder for Layout
 @property (nonatomic, assign) CGRect middleRowRect;
@@ -197,20 +198,6 @@ typedef void (^Callback)();
 }
 
 
-- (UIView *)backgroundView
-{
-    if ([self.delegate respondsToSelector:@selector(backgroundView)]) {
-        return self.delegate.backgroundView;
-    }
-    
-    if (!_backgroundView) {
-        _backgroundView = [GBCustomBackgroundView new];
-    }
-    
-    return _backgroundView;
-}
-
-
 - (CGPoint)offset
 {
     if ([self.delegate respondsToSelector:@selector(calloutOffset)]) {
@@ -219,6 +206,13 @@ typedef void (^Callback)();
     
     return _offset;
 }
+
+
+- (UIColor *)activeBackgroundColor
+{
+    return _activeBackgroundColor ?: (_activeBackgroundColor = [UIColor colorWithWhite:0.85 alpha:1]);
+}
+
 
 - (CALayer *)maskLayer
 {
@@ -676,10 +670,6 @@ typedef void (^Callback)();
         CGRect boundingBox = self.shouldConstrainRightAccessoryToContent ? self.middleRowRect : b;
         [self verticallyCenterView:self.rightAccessoryView inRect:boundingBox];
     }
-    
-    if (self.backgroundView) {
-        self.backgroundView.frame = b;
-    }
 }
 
 
@@ -700,10 +690,6 @@ typedef void (^Callback)();
     
     // try for center of constraining rect
     self.center = CGPointMake(CGRectGetMidX(self.constrainingRect), centerY);
-    
-    // move up or down for arrow
-    CGFloat yOffsetForArrow = ARROW_HEIGHT * (pointingDown ? -1 : 1);
-    self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
     // scoot to the left or right if not wide enough for arrow to point
     CGFloat adjustX = [self offsetXToPositionRect:self.frame
@@ -767,6 +753,10 @@ typedef void (^Callback)();
     CGPoint point = CGPointMake(anchorPoint.x - CGRectGetMinX(b), y);
 
     [self addArrowLayer:self.arrowLayer toMaskLayer:self.maskLayer atPoint:point];
+    
+    // move up or down for arrow
+    CGFloat yOffsetForArrow = ARROW_HEIGHT * (pointingDown ? -1 : 1);
+    self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
     self.layer.mask = self.maskLayer;
 }
@@ -1064,7 +1054,7 @@ typedef void (^Callback)();
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
-    // NSLog(@"DoubleTapped!");
+    // Do nothing, just absorb the double tap away from the mapview
 }
 
 
@@ -1076,9 +1066,8 @@ typedef void (^Callback)();
 
 - (void)activate
 {
-    if ([self.backgroundView isKindOfClass:[GBCustomBackgroundView class]]) {
-        ((GBCustomBackgroundView *)self.backgroundView).active = YES;
-    }
+    self.inactiveBackgroundColor = self.backgroundColor;
+    self.backgroundColor = self.activeBackgroundColor;
     
     SEL calloutAccessoryTappedSelector = sel_registerName("calloutAccessoryTapped:");
     
@@ -1094,9 +1083,7 @@ typedef void (^Callback)();
 
 - (void)deactivate
 {
-    if ([self.backgroundView isKindOfClass:[GBCustomBackgroundView class]]) {
-        ((GBCustomBackgroundView *)self.backgroundView).active = NO;
-    }
+    self.backgroundColor = self.inactiveBackgroundColor;
 }
 
 
@@ -1186,184 +1173,6 @@ typedef void (^Callback)();
          subview.frame = CGRectMake(f.origin.x, y, f.size.width, f.size.height);
          y = CGRectGetMaxY(subview.frame);
      }];
-}
-
-
-@end
-
-
-#pragma mark - *** GBCustomBackgroundView *** -
-static UIColor *_gbCustomCalloutBackgroundActiveColor;
-static UIColor *_gbCustomCalloutBackgroundInactiveColor;
-
-@implementation GBCustomBackgroundView
-+ (void)initialize
-{
-    _gbCustomCalloutBackgroundActiveColor = [UIColor colorWithWhite:0.85 alpha:1];
-    _gbCustomCalloutBackgroundInactiveColor = [UIColor whiteColor];
-}
-
-
-- (id)init
-{
-    self = [super init];
-    
-    if (self) {
-        self.backgroundColor = [UIColor whiteColor];
-    }
-    
-    return self;
-}
-
-
-- (void)setActive:(BOOL)active
-{
-    _active = active;
-    self.backgroundColor = active ? _gbCustomCalloutBackgroundActiveColor : _gbCustomCalloutBackgroundInactiveColor;
-}
-
-
-@end
-
-
-#pragma mark - *** GBCustomCalloutArrow *** -
-@interface GBCustomCalloutArrow ()
-{}
-@property (nonatomic, strong) CAShapeLayer *downMask;
-@property (nonatomic, strong) CAShapeLayer *upMask;
-@property (nonatomic, strong) UIColor *triangleColor;
-@end;
-
-@implementation GBCustomCalloutArrow
-{}
-+ (void)initialize
-{
-    _gbCustomCalloutBackgroundActiveColor = [UIColor colorWithWhite:0.85 alpha:1];
-    _gbCustomCalloutBackgroundInactiveColor = [UIColor whiteColor];
-}
-
-
-- (void)setActive:(BOOL)active
-{
-    _active = active;
-    self.backgroundColor = active ? _gbCustomCalloutBackgroundActiveColor : _gbCustomCalloutBackgroundInactiveColor;
-}
-
-
-- (UIColor *)triangleColor
-{
-    if (!_triangleColor) {
-        _triangleColor = [UIColor whiteColor];
-    }
-    
-    return _triangleColor;
-}
-
-
-- (void)setDirection:(GBCustomCalloutArrowDirection)direction
-{
-    _direction = direction;
-    CAShapeLayer *mask = (direction != GBCustomCalloutArrowDirectionUp) ? self.downMask : self.upMask;
-    self.layer.mask = mask;
-}
-
-
-- (CAShapeLayer *)downMask
-{
-    if (!_downMask) {
-        _downMask = [self maskingTriangleForDirection:GBCustomCalloutArrowDirectionDown];
-    }
-    
-    return _downMask;
-}
-
-
-- (CAShapeLayer *)upMask
-{
-    if (!_upMask) {
-        _upMask = [self maskingTriangleForDirection:GBCustomCalloutArrowDirectionUp];
-    }
-    
-    return _upMask;
-}
-
-
-- (CAShapeLayer *)maskingTriangleForDirection:(GBCustomCalloutArrowDirection)direction
-{
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    CGMutablePathRef path = [self trianglePath:direction];
-    
-    [maskLayer setPath:path];
-    [maskLayer setFillColor:[[UIColor greenColor] CGColor]];
-    return maskLayer;
-}
-
-
-- (CGMutablePathRef)trianglePath:(GBCustomCalloutArrowDirection)direction
-{
-    CGRect b = self.bounds;
-    CGMutablePathRef path = CGPathCreateMutable();
-    
-    CGFloat leftY, midY, rightY;
-    
-    if (direction == GBCustomCalloutArrowDirectionUp) {
-        leftY  = CGRectGetMaxY(b);
-        midY   = CGRectGetMinY(b);
-        rightY = CGRectGetMaxY(b);
-    } else {
-        leftY  = CGRectGetMinY(b);
-        midY   = CGRectGetMaxY(b);
-        rightY = CGRectGetMinY(b);
-    }
-    
-    CGPathMoveToPoint(path, NULL, CGRectGetMinX(b), leftY);    // bottom left
-    CGPathAddLineToPoint(path, NULL, CGRectGetMidX(b), midY); // top center
-    CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(b), rightY); // bottom right
-    
-    return path;
-}
-
-
-- (void)_init
-{
-    self.direction = GBCustomCalloutArrowDirectionDown;
-    self.backgroundColor = _gbCustomCalloutBackgroundInactiveColor;
-}
-
-
-- (id)init
-{
-    self = [super init];
-    
-    if (self) {
-        [self _init];
-    }
-    
-    return self;
-}
-
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    
-    if (self) {
-        [self _init];
-    }
-    
-    return self;
-}
-
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    
-    if (self) {
-        [self _init];
-    }
-    
-    return self;
 }
 
 

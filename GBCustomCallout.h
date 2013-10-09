@@ -46,7 +46,6 @@ typedef enum {
 @property (nonatomic, strong) UIView *footerView;
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIView *bottomView;
-@property (nonatomic, strong) UIView *backgroundView; //???: may change this - BigAB
 
 #pragma mark - Callout Modifications
 @property (nonatomic, assign) CGPoint offset;
@@ -62,6 +61,8 @@ typedef enum {
 @property (nonatomic, strong) NSNumber *anchorMargin;
 
 @property (nonatomic, assign) GBCustomCalloutAnimation presentAnimation, dismissAnimation; // default GBCalloutAnimationBounce, GBCalloutAnimationFade respectively
+
+@property (nonatomic, strong) UIColor *activeBackgroundColor;
 
 #pragma mark - Class methods
 + (GBCustomCallout *)customCalloutWithDelegate:(id<GBCustomCalloutViewDelegate>)delegate;
