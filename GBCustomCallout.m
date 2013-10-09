@@ -706,19 +706,34 @@ typedef void (^Callback)();
     self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
     // scoot to the left or right if not wide enough for arrow to point
-    CGFloat minPointX = CGRectGetMinX(self.frame) - [self.anchorMargin floatValue];
-    CGFloat maxPointX = CGRectGetMaxX(self.frame) - [self.anchorMargin floatValue];
-    
-    CGFloat adjustX = 0;
-    
-    if (self.annotationAnchorPoint.x < minPointX) adjustX = self.annotationAnchorPoint.x - minPointX;
-    
-    if (self.annotationAnchorPoint.x > maxPointX) adjustX = self.annotationAnchorPoint.x - maxPointX;
-    
+    CGFloat adjustX = [self offsetXToPositionRect:self.frame
+                                        overPoint:self.annotationAnchorPoint
+                                       withMargin:[self.anchorMargin floatValue]];
+
     // make sure frame is not on half pixels CGRectIntegral(self.frame)
-    self.frame = CGRectOffset(self.frame, adjustX, 0);
+    self.frame = CGRectIntegral(CGRectOffset(self.frame, adjustX, 0));
 }
 
+
+- (CGFloat)offsetXToPositionRect:(CGRect)rect
+                       overPoint:(CGPoint)point
+                      withMargin:(CGFloat)margin
+{
+    CGFloat offsetX = 0;
+    
+    CGFloat minPointX = CGRectGetMinX(rect) + margin;
+    CGFloat maxPointX = CGRectGetMaxX(rect) - margin;
+    
+    if (point.x < minPointX) {
+        offsetX = point.x - minPointX;
+    }
+    
+    if (point.x > maxPointX) {
+        offsetX = 2 * (point.x - maxPointX);
+    }
+    
+    return offsetX;
+}
 
 #pragma mark - Size That Fits
 - (CGSize)sizeThatFits:(CGSize)size

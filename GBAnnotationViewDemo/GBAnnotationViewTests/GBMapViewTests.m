@@ -15,7 +15,7 @@ describe(@"GBMapView", ^{
     
     it(@"should be awesome", ^{
         NSString *awesome = @"awesome";
-        [[awesome should] equal:@"awesome"];
+        [[awesome shouldNot] equal:@"awesome"];
     });
     
     

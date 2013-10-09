@@ -30,7 +30,6 @@
 		90E42B9E17F4938D00444885 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B9D17F4938D00444885 /* MapKit.framework */; };
 		90E42BA017F4939500444885 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B9F17F4939500444885 /* QuartzCore.framework */; };
 		90E42BA217F4988200444885 /* iphone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90E42BA117F4988200444885 /* iphone.storyboard */; };
-		90E42BAB17F49A0100444885 /* GBAnnotationViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E42BAA17F49A0100444885 /* GBAnnotationViewTests.m */; };
 		90E42BB317F49BDF00444885 /* GBMapViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E42BB217F49BDF00444885 /* GBMapViewTests.m */; };
 /* End PBXBuildFile section */
 
@@ -79,7 +78,6 @@
 		90E42B9D17F4938D00444885 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		90E42B9F17F4939500444885 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		90E42BA117F4988200444885 /* iphone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iphone.storyboard; sourceTree = "<group>"; };
-		90E42BAA17F49A0100444885 /* GBAnnotationViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBAnnotationViewTests.m; path = GBAnnotationViewTests/GBAnnotationViewTests.m; sourceTree = SOURCE_ROOT; };
 		90E42BAD17F49A2900444885 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = GBAnnotationViewTests/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		90E42BAE17F49A2900444885 /* GBAnnotationViewTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GBAnnotationViewTests-Info.plist"; path = "GBAnnotationViewTests/GBAnnotationViewTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		90E42BB217F49BDF00444885 /* GBMapViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBMapViewTests.m; path = GBAnnotationViewTests/GBMapViewTests.m; sourceTree = SOURCE_ROOT; };
@@ -210,7 +208,6 @@
 		90E42B8D17F492F300444885 /* GBAnnotationViewTests */ = {
 			isa = PBXGroup;
 			children = (
-				90E42BAA17F49A0100444885 /* GBAnnotationViewTests.m */,
 				90E42BB217F49BDF00444885 /* GBMapViewTests.m */,
 				90E42B8E17F492F300444885 /* Supporting Files */,
 			);
@@ -389,7 +386,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				90E42BB317F49BDF00444885 /* GBMapViewTests.m in Sources */,
-				90E42BAB17F49A0100444885 /* GBAnnotationViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +496,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GBAnnotationViewDemo/GBAnnotationViewDemo-Prefix.pch";
 				INFOPLIST_FILE = "GBAnnotationViewDemo/GBAnnotationViewDemo-Info.plist";
@@ -513,6 +513,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GBAnnotationViewDemo/GBAnnotationViewDemo-Prefix.pch";
 				INFOPLIST_FILE = "GBAnnotationViewDemo/GBAnnotationViewDemo-Info.plist";
