@@ -355,11 +355,7 @@ typedef void (^Callback)();
 #pragma mark - Initialization
 - (void)_init
 {
-    self.backgroundColor = [UIColor whiteColor];
-    self.autoresizesSubviews = NO;
-    self.autoresizingMask = UIViewAutoresizingNone;
-    self.presentAnimation = GBCustomCalloutAnimationBounce;
-    self.dismissAnimation = GBCustomCalloutAnimationFade;
+    [self setDefaults];
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -408,6 +404,16 @@ typedef void (^Callback)();
     }
     
     return self;
+}
+
+- (void)setDefaults
+{
+    self.backgroundColor = [UIColor whiteColor];
+    self.autoresizesSubviews = NO;
+    self.autoresizingMask = UIViewAutoresizingNone;
+    self.presentAnimation = GBCustomCalloutAnimationBounce;
+    self.dismissAnimation = GBCustomCalloutAnimationFade;
+    self.bubbleShape = YES;
 }
 
 
@@ -480,14 +486,16 @@ typedef void (^Callback)();
     // 3. Position Callout
     [self positionCalloutRelativeTo:self.annotationView];
     
-//    if (self.superview == self.annotationView && !self.hidden) {
-//        if (![self isContainedByConstrainingRect]) {
-//            [self moveMapToContainCalloutThen:nil];
-//        }
-//    }
+    if (self.superview == self.annotationView && !self.hidden) {
+        if (![self isContainedByConstrainingRect]) {
+            [self moveMapToContainCalloutThen:nil];
+        }
+    }
     
     // 4. Make Bubble Shape
-    [self addBubbleMask];
+    if (self.bubbleShape) {
+        [self addBubbleMask];
+    }
 }
 
 
@@ -531,9 +539,10 @@ typedef void (^Callback)();
     
     BOOL any = self.allowedArrowDirections == GBCustomCalloutArrowDirectionAny;
     BOOL up  = self.allowedArrowDirections & GBCustomCalloutArrowDirectionUp;
+    BOOL onlyup= self.allowedArrowDirections == GBCustomCalloutArrowDirectionUp;
     
     // do we allow it to point up?
-    if (any || up) {
+    if ((any || up) && !onlyup) {
         CGRect rect = [annotationView convertRect:annotationView.bounds toView:mapView];
         // how much room do we have in the map, both above and below our target rect?
         CGFloat topSpace = CGRectGetMinY(rect);
@@ -544,6 +553,10 @@ typedef void (^Callback)();
         if (topSpace < calloutHeight && bottomSpace > topSpace) {
             bestDirection = GBCustomCalloutArrowDirectionUp;
         }
+    }
+    
+    if (onlyup) {
+        bestDirection = GBCustomCalloutArrowDirectionUp;
     }
     
     return bestDirection;

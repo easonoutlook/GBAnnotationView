@@ -64,6 +64,8 @@ typedef enum {
 
 @property (nonatomic, strong) UIColor *activeBackgroundColor;
 
+@property (nonatomic, assign) BOOL bubbleShape;
+
 #pragma mark - Class methods
 + (GBCustomCallout *)customCalloutWithDelegate:(id<GBCustomCalloutViewDelegate>)delegate;
 
