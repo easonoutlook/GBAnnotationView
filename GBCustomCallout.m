@@ -572,6 +572,7 @@ typedef void (^Callback)();
     CGFloat offsetY = pointingDown ? self.offset.y : - (self.offset.y);
     
     anchorPoint = CGPointMake(x + self.offset.x, y + offsetY);
+    
     return anchorPoint;
 }
 
@@ -768,10 +769,12 @@ typedef void (^Callback)();
     [self addArrowLayer:self.arrowLayer toMaskLayer:self.maskLayer atPoint:point];
     
     // move up or down for arrow
-    CGFloat yOffsetForArrow = ARROW_HEIGHT * (pointingDown ? -1 : 1);
-    self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
+    CGFloat yOffsetForArrow = ARROW_HEIGHT * (pointingDown ? -0.5 : 0.5);
+    self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow);
     
     self.layer.mask = self.maskLayer;
+    [self.maskLayer removeAllAnimations];
+    [self.arrowLayer removeAllAnimations];
 }
 
 

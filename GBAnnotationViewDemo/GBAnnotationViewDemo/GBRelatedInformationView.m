@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, assign) BOOL webViewloaded;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) NSURLRequest *initialRequest;
 
 @end
 
@@ -45,12 +47,27 @@
     }
 }
 
+- (void)setSpinner:(UIActivityIndicatorView *)spinner
+{
+    if (_spinner != spinner) {
+        [_spinner removeFromSuperview];
+        if (spinner) {
+            [self addSubview:spinner];
+        }
+        _spinner = spinner;
+    }
+}
+
 - (void)setSubject:(NSString *)subject
 {
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.spinner startAnimating];
+    
     if (![_subject isEqualToString:subject]) {
         _subject = subject;
         NSString *urlString = [NSString stringWithFormat:@"http://bigab.net/%@", [self urlEncode:subject]];
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+        self.initialRequest = request;
         [self.webView loadRequest:request];
     }
 }
@@ -58,6 +75,7 @@
 #pragma mark - LifeCycle
 - (void)dealloc
 {
+    self.spinner = nil;
     self.webView = nil;
 }
 
@@ -96,6 +114,16 @@
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView {
     self.webViewloaded = YES;
+    self.spinner = nil;
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if (navigationType != UIWebViewNavigationTypeOther) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Layout
@@ -103,16 +131,19 @@
 {
     CGRect f = self.frame;
     __block CGFloat y = 0.0;
-    __block CGRect wrapRect;
+    __block CGRect wrapRect = CGRectZero;
     
     [self.subviews enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
+        if (subview == self.webView && !self.webViewloaded) return;
         CGRect sf = subview.frame;
         subview.frame = subview.bounds;
         y += sf.size.height;
         wrapRect = CGRectUnion(wrapRect, sf);
     }];
     
-    self.frame = CGRectMake(f.origin.x, f.origin.y, wrapRect.size.width, wrapRect.size.height);
+    if (!CGRectEqualToRect(wrapRect, CGRectZero)) {
+        self.frame = CGRectMake(f.origin.x, f.origin.y, wrapRect.size.width, wrapRect.size.height);
+    }
 }
 
 @end

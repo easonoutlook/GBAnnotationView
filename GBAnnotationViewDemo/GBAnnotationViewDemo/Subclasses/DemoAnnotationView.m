@@ -79,17 +79,16 @@ static UIView *_bomAd;
 
 
 #pragma mark bottomView
-//- (UIView *)bottomView
-//{
-//    if (!_bottomView) {
-//        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 160, 40)];
-//        bottomView.subject = self.annotation.title;
-//        bottomView.clipsToBounds = YES;
-//        bottomView.backgroundColor = [UIColor yellowColor];
-//        _bottomView = bottomView;
-//    }
-//    return _bottomView;
-//}
+- (UIView *)bottomView
+{
+    if (!_bottomView) {
+        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 160, 25)];
+        bottomView.subject = self.annotation.title;
+        bottomView.clipsToBounds = YES;
+        _bottomView = bottomView;
+    }
+    return _bottomView;
+}
 //
 //
 //- (UIView *)bottomView
@@ -102,18 +101,18 @@ static UIView *_bomAd;
 //    }
 //    return _bottomView;
 //}
-
-- (UIView *)bottomView
-{
-    if (!_bomAd) {
-        _bomAd = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
-        _bomAd.backgroundColor = [UIColor blueColor];
-        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
-        tap.delegate = self;
-        [_bomAd addGestureRecognizer:tap];
-    }
-    return _bomAd;
-}
+//
+//- (UIView *)bottomView
+//{
+//    if (!_bomAd) {
+//        _bomAd = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
+//        _bomAd.backgroundColor = [UIColor blueColor];
+//        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
+//        tap.delegate = self;
+//        [_bomAd addGestureRecognizer:tap];
+//    }
+//    return _bomAd;
+//}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
@@ -159,34 +158,34 @@ static UIView *_bomAd;
 //    return _leftCalloutAccessoryView;
 //}
 //
-- (UIView *)topView
-{
-    if (!_topView) {
-        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
-        _topView.backgroundColor = [UIColor redColor];
-    }
-    return _topView;
-}
-
-
-- (UIView *)headerView
-{
-    if (!_headerView) {
-        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
-        _headerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0];
-    }
-    return _headerView;
-}
-
-
-- (UIView *)footerView
-{
-    if (!_footerView) {
-        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
-        _footerView.backgroundColor = [UIColor yellowColor];
-    }
-    return _footerView;
-}
+//- (UIView *)topView
+//{
+//    if (!_topView) {
+//        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, 10)];
+//        _topView.backgroundColor = [UIColor redColor];
+//    }
+//    return _topView;
+//}
+//
+//
+//- (UIView *)headerView
+//{
+//    if (!_headerView) {
+//        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
+//        _headerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:1.0];
+//    }
+//    return _headerView;
+//}
+//
+//
+//- (UIView *)footerView
+//{
+//    if (!_footerView) {
+//        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 10)];
+//        _footerView.backgroundColor = [UIColor yellowColor];
+//    }
+//    return _footerView;
+//}
 
 
 #pragma mark Callout Modifications
