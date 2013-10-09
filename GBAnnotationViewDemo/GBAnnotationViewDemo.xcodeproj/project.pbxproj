@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3DBEF564783E4271AF70B8A6 /* libPods-GBAnnotationViewTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D88B2E1037419F9C6576D8 /* libPods-GBAnnotationViewTests.a */; };
+		904AD4FD1805E9DB00F13C9B /* GBCustomCalloutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 904AD4FC1805E9DB00F13C9B /* GBCustomCalloutTests.m */; };
 		90712C8617F4AAA5003ABAF0 /* GBAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C8117F4AAA5003ABAF0 /* GBAnnotationView.m */; };
 		90712C8717F4AAA5003ABAF0 /* GBCustomCallout.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C8317F4AAA5003ABAF0 /* GBCustomCallout.m */; };
 		90712C8817F4AAA5003ABAF0 /* GBMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C8517F4AAA5003ABAF0 /* GBMapView.m */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		01D88B2E1037419F9C6576D8 /* libPods-GBAnnotationViewTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GBAnnotationViewTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		904AD4FC1805E9DB00F13C9B /* GBCustomCalloutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBCustomCalloutTests.m; path = GBAnnotationViewTests/GBCustomCalloutTests.m; sourceTree = SOURCE_ROOT; };
 		90712C8017F4AAA5003ABAF0 /* GBAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBAnnotationView.h; path = ../../GBAnnotationView.h; sourceTree = "<group>"; };
 		90712C8117F4AAA5003ABAF0 /* GBAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GBAnnotationView.m; path = ../../GBAnnotationView.m; sourceTree = "<group>"; };
 		90712C8217F4AAA5003ABAF0 /* GBCustomCallout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GBCustomCallout.h; path = ../../GBCustomCallout.h; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		90E42B8D17F492F300444885 /* GBAnnotationViewTests */ = {
 			isa = PBXGroup;
 			children = (
+				904AD4FC1805E9DB00F13C9B /* GBCustomCalloutTests.m */,
 				90E42BB217F49BDF00444885 /* GBMapViewTests.m */,
 				90E42B8E17F492F300444885 /* Supporting Files */,
 			);
@@ -385,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				904AD4FD1805E9DB00F13C9B /* GBCustomCalloutTests.m in Sources */,
 				90E42BB317F49BDF00444885 /* GBMapViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -28,7 +28,7 @@
 #define SUBVIEW_HORZ_MARGIN         10.0
 #define SUBVIEW_VERT_MARGIN         10.0
 
-#define ANCHOR_MARGIN               37.0
+#define ANCHOR_MARGIN               50.0
 
 typedef void (^Callback)();
 
@@ -486,11 +486,11 @@ typedef void (^Callback)();
     // 3. Position Callout
     [self positionCalloutRelativeTo:self.annotationView];
     
-    if (self.superview == self.annotationView && !self.hidden) {
-        if (![self isContainedByConstrainingRect]) {
-            [self moveMapToContainCalloutThen:nil];
-        }
-    }
+//    if (self.superview == self.annotationView && !self.hidden) {
+//        if (![self isContainedByConstrainingRect]) {
+//            [self moveMapToContainCalloutThen:nil];
+//        }
+//    }
     
     // 4. Make Bubble Shape
     [self addBubbleMask];
@@ -705,6 +705,7 @@ typedef void (^Callback)();
     CGFloat yOffsetForArrow = ARROW_HEIGHT * (pointingDown ? -1 : 1);
     self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
+    NSLog(@"Before: %@", [NSValue valueWithCGRect:self.frame]);
     // scoot to the left or right if not wide enough for arrow to point
     CGFloat adjustX = [self offsetXToPositionRect:self.frame
                                         overPoint:self.annotationAnchorPoint
@@ -712,6 +713,8 @@ typedef void (^Callback)();
 
     // make sure frame is not on half pixels CGRectIntegral(self.frame)
     self.frame = CGRectIntegral(CGRectOffset(self.frame, adjustX, 0));
+    NSLog(@"Adjust: %@", [NSNumber numberWithFloat:adjustX]);
+    NSLog(@"After: %@", [NSValue valueWithCGRect:self.frame]);
 }
 
 
@@ -729,7 +732,7 @@ typedef void (^Callback)();
     }
     
     if (point.x > maxPointX) {
-        offsetX = 2 * (point.x - maxPointX);
+        offsetX = point.x - maxPointX;
     }
     
     return offsetX;
@@ -771,7 +774,7 @@ typedef void (^Callback)();
 
 - (void)addArrowLayer:(CAShapeLayer *)arrowLayer toMaskLayer:(CALayer *)maskLayer atPoint:(CGPoint)point
 {
-    arrowLayer.frame = CGRectMake(point.x, point.y, ARROW_WIDTH, ARROW_HEIGHT);
+    arrowLayer.frame = CGRectMake(point.x - (ARROW_WIDTH/2), point.y, ARROW_WIDTH, ARROW_HEIGHT);
     [self configureArrowLayer:arrowLayer];
     [maskLayer addSublayer:arrowLayer];
     
