@@ -705,7 +705,6 @@ typedef void (^Callback)();
     CGFloat yOffsetForArrow = ARROW_HEIGHT * (pointingDown ? -1 : 1);
     self.frame = CGRectOffset(self.frame, 0, yOffsetForArrow + (pointingDown ? 1 : -1));
     
-    NSLog(@"Before: %@", [NSValue valueWithCGRect:self.frame]);
     // scoot to the left or right if not wide enough for arrow to point
     CGFloat adjustX = [self offsetXToPositionRect:self.frame
                                         overPoint:self.annotationAnchorPoint
@@ -713,8 +712,6 @@ typedef void (^Callback)();
 
     // make sure frame is not on half pixels CGRectIntegral(self.frame)
     self.frame = CGRectIntegral(CGRectOffset(self.frame, adjustX, 0));
-    NSLog(@"Adjust: %@", [NSNumber numberWithFloat:adjustX]);
-    NSLog(@"After: %@", [NSValue valueWithCGRect:self.frame]);
 }
 
 
@@ -764,7 +761,10 @@ typedef void (^Callback)();
     self.maskLayer.frame = b;
     
     CGPoint anchorPoint = [self.annotationView convertPoint:self.annotationAnchorPoint toView:self];
-    CGPoint point = CGPointMake(anchorPoint.x - CGRectGetMinX(b), CGRectGetHeight(b));
+    
+    BOOL pointingDown = (self.arrowDirection == GBCustomCalloutArrowDirectionDown);
+    CGFloat y = pointingDown ? CGRectGetHeight(b) : -ARROW_HEIGHT;
+    CGPoint point = CGPointMake(anchorPoint.x - CGRectGetMinX(b), y);
 
     [self addArrowLayer:self.arrowLayer toMaskLayer:self.maskLayer atPoint:point];
     
@@ -784,21 +784,27 @@ typedef void (^Callback)();
 
 - (void)configureArrowLayer:(CAShapeLayer *)arrowLayer
 {
-    CGMutablePathRef path = [self trianglePathForRect:arrowLayer.bounds];
+    BOOL pointingDown = (self.arrowDirection == GBCustomCalloutArrowDirectionDown);
+    CGRectEdge edge = pointingDown ? CGRectMaxYEdge : CGRectMinYEdge;
+    CGMutablePathRef path = [self trianglePathForRect:arrowLayer.bounds pointingAtEdge:edge];
     arrowLayer.path = path;
 }
 
 
 - (void)increaseViewSizeToEnvelopeArrow
 {
+    BOOL pointingDown = (self.arrowDirection == GBCustomCalloutArrowDirectionDown);
     CGRect b = self.layer.bounds;
-    self.bounds = CGRectMake(b.origin.x, b.origin.y, b.size.width, b.size.height + ARROW_HEIGHT);
+    
+    CGFloat y = pointingDown ? b.origin.y : b.origin.y - ARROW_HEIGHT;
+    
+    self.bounds = CGRectMake(b.origin.x, y, b.size.width, b.size.height + ARROW_HEIGHT);
 }
 
 
 - (CGMutablePathRef)trianglePathForRect:(CGRect)rect
 {
-    return [self trianglePathForRect:rect pointingAtEdge:CGRectMaxXEdge];
+    return [self trianglePathForRect:rect pointingAtEdge:CGRectMaxYEdge];
 }
 
 
