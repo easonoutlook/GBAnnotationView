@@ -86,25 +86,9 @@
         return nil;
     }
     
-    //TODO: delete all this, this is just here so I can compare custom callout to native *********** - BIGAB
-//    if ([annotation isKindOfClass:[GBStationAnnotation class]]) {
-//        if (!((GBStationAnnotation*)annotation).features) {
-//            static NSString *plain = @"plainAnnotation";
-//            MKAnnotationView *annotationView = [self dequeueReusableAnnotationViewWithIdentifier:plain];
-//            if (!annotationView) {
-//                annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:plain];
-//                annotationView.canShowCallout = YES;
-//                annotationView.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-//                annotationView.leftCalloutAccessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SFIcon"]];
-//            }
-//            return annotationView;
-//        }
-//    }
-    // *********************************
-    
     Class annotationViewClass = self.annotationViewClass;
     
-    NSString *identifier = NSStringFromClass([annotation class]); //???: maybe don't do this? - BigAB
+    NSString *identifier = NSStringFromClass([annotation class]);
     id annotationView = [self dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     if (annotationView == nil)

@@ -486,15 +486,15 @@ typedef void (^Callback)();
     // 3. Position Callout
     [self positionCalloutRelativeTo:self.annotationView];
     
+    // 4. Make Bubble Shape
+    if (self.bubbleShape) {
+        [self addBubbleMask];
+    }
+    
     if (self.superview == self.annotationView && !self.hidden) {
         if (![self isContainedByConstrainingRect]) {
             [self moveMapToContainCalloutThen:nil];
         }
-    }
-    
-    // 4. Make Bubble Shape
-    if (self.bubbleShape) {
-        [self addBubbleMask];
     }
 }
 
