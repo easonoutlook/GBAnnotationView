@@ -20,13 +20,13 @@
 //@property (nonatomic, strong) UIView *headerView;
 //@property (nonatomic, strong) UIView *footerView;
 
-//- (BOOL)shouldExpandToAccessoryHeight;
-//- (BOOL)shouldExpandToAccessoryWidth;
+- (BOOL)shouldExpandToAccessoryHeight;
+- (BOOL)shouldExpandToAccessoryWidth;
 
 //- (BOOL)shouldVerticallyCenterLeftAccessory;
 //- (BOOL)shouldVerticallyCenterRightAccessory;
 
-- (BOOL)shouldConstrainLeftAccessoryToContent;
+//- (BOOL)shouldConstrainLeftAccessoryToContent;
 //- (BOOL)shouldConstrainRightAccessoryToContent;
 
 - (CGPoint)calloutOffset;

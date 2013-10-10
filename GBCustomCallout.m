@@ -457,17 +457,17 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      |             Header View                |
-     ||________________________________________|
+     |________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     ||Access..|      - titleView   |Accessor..|
+     |Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     ||________________________________________|
+     |________________________________________|
      */
     
     if (!self.annotationView) return;
@@ -587,11 +587,17 @@ typedef void (^Callback)();
     
     // add left/right now if constrained
     if (self.shouldConstrainLeftAccessoryToContent) {
-        wrappingRect = [self rectFromAddingView:self.leftAccessoryView toRect:wrappingRect onEdge:CGRectMinXEdge];
+        wrappingRect = [self rectFromAddingView:self.leftAccessoryView
+                                         toRect:wrappingRect
+                                         onEdge:CGRectMinXEdge
+                                        maxSize:[self getMaxLeftAccessorySize]];
     }
     
     if (self.shouldConstrainRightAccessoryToContent) {
-        wrappingRect = [self rectFromAddingView:self.rightAccessoryView toRect:wrappingRect onEdge:CGRectMaxXEdge];
+        wrappingRect = [self rectFromAddingView:self.rightAccessoryView
+                                         toRect:wrappingRect
+                                         onEdge:CGRectMaxXEdge
+                                        maxSize:[self getMaxRightAccessorySize]];
     }
     
     // save the middle row rect for use in positioning later
@@ -602,11 +608,17 @@ typedef void (^Callback)();
     
     // add left/right after top and bottom if not constrained
     if (!self.shouldConstrainLeftAccessoryToContent) {
-        wrappingRect = [self rectFromAddingView:self.leftAccessoryView toRect:wrappingRect onEdge:CGRectMinXEdge];
+        wrappingRect = [self rectFromAddingView:self.leftAccessoryView
+                                         toRect:wrappingRect
+                                         onEdge:CGRectMinXEdge
+                                        maxSize:[self getMaxLeftAccessorySize]];
     }
     
     if (!self.shouldConstrainRightAccessoryToContent) {
-        wrappingRect = [self rectFromAddingView:self.rightAccessoryView toRect:wrappingRect onEdge:CGRectMaxXEdge];
+        wrappingRect = [self rectFromAddingView:self.rightAccessoryView
+                                         toRect:wrappingRect
+                                         onEdge:CGRectMaxXEdge
+                                        maxSize:[self getMaxRightAccessorySize]];
     }
     
     wrappingRect = [self rectFromAddingView:self.headerView toRect:wrappingRect onEdge:CGRectMinYEdge];
@@ -618,14 +630,20 @@ typedef void (^Callback)();
 
 - (CGRect)rectFromAddingView:(UIView *)view toRect:(CGRect)rect onEdge:(CGRectEdge)edge
 {
-    if (!view) return rect;
-    
-    CGPoint origin = [self originForView:view inRect:rect forEdge:edge];
-    return [self wrappingRect:rect forPositioningSubview:view atPoint:origin];
+    return [self rectFromAddingView:view toRect:rect onEdge:edge maxSize:CGRectInfinite.size];
 }
 
 
-- (CGPoint)originForView:(UIView *)view inRect:(CGRect)rect forEdge:(CGRectEdge)edge
+- (CGRect)rectFromAddingView:(UIView *)view toRect:(CGRect)rect onEdge:(CGRectEdge)edge maxSize:(CGSize)maxSize
+{
+    if (!view) return rect;
+    
+    CGPoint origin = [self originForView:view inRect:rect forEdge:edge maxSize:maxSize];
+    return [self wrappingRect:rect forPositioningSubview:view atPoint:origin maxSize:maxSize forEdge:edge];
+}
+
+
+- (CGPoint)originForView:(UIView *)view inRect:(CGRect)rect forEdge:(CGRectEdge)edge maxSize:(CGSize)maxSize
 {
     CGFloat horzMargin = [self.subviewHorizontalMargin floatValue];
     CGFloat vertMargin = [self.subviewVerticalMargin floatValue];
@@ -633,7 +651,10 @@ typedef void (^Callback)();
     
     switch (edge) {
         case CGRectMinXEdge:
-            origin = CGPointMake(-(CGRectGetWidth(view.frame) + horzMargin), 0);
+        {
+            CGFloat width = MIN(CGRectGetWidth(view.frame), maxSize.width);
+            origin = CGPointMake(-(width + horzMargin), 0);
+        }
             break;
             
         case CGRectMaxXEdge:
@@ -641,7 +662,10 @@ typedef void (^Callback)();
             break;
             
         case CGRectMinYEdge:
-            origin = CGPointMake(CGRectGetMinX(rect), -(CGRectGetHeight(view.frame) + vertMargin));
+        {
+            CGFloat height = MIN(CGRectGetHeight(view.frame), maxSize.height);
+            origin = CGPointMake(CGRectGetMinX(rect), -(height + vertMargin));
+        }
             break;
             
         case CGRectMaxYEdge:
@@ -655,7 +679,11 @@ typedef void (^Callback)();
 }
 
 
-- (CGRect)wrappingRect:(CGRect)rect forPositioningSubview:(UIView *)subview atPoint:(CGPoint)point
+- (CGRect)wrappingRect:(CGRect)rect
+ forPositioningSubview:(UIView *)subview
+               atPoint:(CGPoint)point
+               maxSize:(CGSize)maxSize
+               forEdge:(CGRectEdge)edge
 {
     if (!subview) return rect;
     
@@ -663,11 +691,54 @@ typedef void (^Callback)();
     f.origin = point;
     subview.frame = f;
     
+    if ( ! CGSizeEqualToSize(maxSize, CGRectInfinite.size) ) {
+        CGFloat width = MIN(f.size.width, maxSize.width);
+        CGFloat height = MIN(f.size.height, maxSize.height);
+
+        CGRect m = CGRectMake(f.origin.x, f.origin.y, width, height);
+        
+        CGFloat x = CGRectGetMinX(m);
+        if (edge == CGRectMinXEdge) {
+            x = CGRectGetMaxX(m) - f.size.width;
+        }
+        
+        CGFloat y = CGRectGetMidY(m) - CGRectGetMidY(f); // to center m
+        
+        subview.frame = CGRectMake(x, y, f.size.width, f.size.height);
+        f = m;
+    }
+    
     if (CGRectEqualToRect(rect, CGRectZero)) {
         return f;
     }
-    
     return CGRectUnion(rect, f);
+}
+
+
+- (CGSize)getMaxLeftAccessorySize
+{
+    CGSize maxLeftSize = CGRectInfinite.size;
+    if ( ! [self shouldExpandToAccessoryHeight] ) {
+        maxLeftSize.height = 20.0;
+    }
+    if ( ! [self shouldExpandToAccessoryWidth] ) {
+        maxLeftSize.width = [self.maxWidthForLeftCallout floatValue];
+    }
+    return maxLeftSize;
+}
+
+
+
+- (CGSize)getMaxRightAccessorySize
+{
+    CGSize maxRightSize = CGRectInfinite.size;
+    if ( ! [self shouldExpandToAccessoryHeight] ) {
+        maxRightSize.height = 40.0;
+    }
+    if ( ! [self shouldExpandToAccessoryWidth] ) {
+        maxRightSize.width = [self.maxWidthForRightCallout floatValue];
+    }
+    return maxRightSize;
 }
 
 
@@ -675,7 +746,7 @@ typedef void (^Callback)();
 {
     CGRect b = self.bounds;
     
-    if (self.leftAccessoryView && self.shouldVerticallyCenterRightAccessory) {
+    if (self.leftAccessoryView && self.shouldVerticallyCenterLeftAccessory) {
         CGRect boundingBox = self.shouldConstrainLeftAccessoryToContent ? self.middleRowRect : b;
         [self verticallyCenterView:self.leftAccessoryView inRect:boundingBox];
     }
@@ -1071,12 +1142,6 @@ typedef void (^Callback)();
 - (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
     // Do nothing, just absorb the double tap away from the mapview
-}
-
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return NO;
 }
 
 

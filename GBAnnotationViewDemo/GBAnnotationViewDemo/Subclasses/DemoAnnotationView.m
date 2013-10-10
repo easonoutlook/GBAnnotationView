@@ -68,10 +68,10 @@ static UIView *_bomAd;
 {
     if (!_leftCalloutAccessoryView) {
         GBAnnotation *annotation = self.annotation;
-        UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(40.0, 60.0)];
+        UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(80.0, 120.0)];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         imageView.clipsToBounds = YES;
-        imageView.frame = CGRectMake(0, 0, 40, 40);
+        //imageView.frame = CGRectMake(0, 0, 40, 40);
         _leftCalloutAccessoryView = imageView;
     }
     return _leftCalloutAccessoryView;
@@ -89,7 +89,7 @@ static UIView *_bomAd;
     }
     return _bottomView;
 }
-//
+
 //
 //- (UIView *)bottomView
 //{
@@ -119,17 +119,17 @@ static UIView *_bomAd;
     return NO;
 }
 
-- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
-{
-    UIView *view = gestureRecognizer.view;
-    CGRect f = view.frame;
-    
-    int r = arc4random() % 50;
-    int spread = (f.size.height == 20) ? 0 : 25;
-    f.size = CGSizeMake(f.size.width, MAX(20, f.size.height + (r-spread)));
-    
-    view.frame = f;
-}
+//- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
+//{
+//    UIView *view = gestureRecognizer.view;
+//    CGRect f = view.frame;
+//    
+//    int r = arc4random() % 50;
+//    int spread = (f.size.height == 20) ? 0 : 25;
+//    f.size = CGSizeMake(f.size.width, MAX(20, f.size.height + (r-spread)));
+//    
+//    view.frame = f;
+//}
 //
 //- (UIView *)contentView
 //{
@@ -139,12 +139,12 @@ static UIView *_bomAd;
 //    }
 //    return _contentView;
 //}
-
+//
 //- (UIView *)rightAccessoryView
 //{
 //    if (!_rightAccessoryView) {
-//        _rightAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 10)];
-//        _rightAccessoryView.backgroundColor = [UIColor orangeColor];
+//        _rightAccessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 10)];
+//        _rightAccessoryView.backgroundColor = [UIColor redColor];
 //    }
 //    return _rightAccessoryView;
 //}
@@ -194,22 +194,37 @@ static UIView *_bomAd;
     return CGPointMake(-8, 0);
 }
 
-
-- (BOOL)shouldConstrainLeftAccessoryToContent
-{
-    return self.bottomView ? YES : NO;
-}
+//
+//- (BOOL)shouldConstrainLeftAccessoryToContent
+//{
+//    return self.bottomView ? YES : NO;
+//}
 
 //- (BOOL)shouldVerticallyCenterLeftAccessory
 //{
 //    return YES;
 //}
-//
+
 //
 //- (BOOL)shouldVerticallyCenterRightAccessory
 //{
 //    return YES;
 //}
+
+//- (BOOL)shouldConstrainLeftAccessoryToContent
+//{
+//    return self.bottomView ? YES : NO;
+//}
+
+- (BOOL)shouldExpandToAccessoryHeight
+{
+    return YES;
+}
+
+- (BOOL)shouldExpandToAccessoryWidth
+{
+    return YES;
+}
 
 #pragma mark - Utility
 - (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize

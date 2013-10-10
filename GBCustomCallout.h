@@ -126,15 +126,3 @@ typedef enum {
 @interface GBCustomContentView : UIView
 {}
 @end;
-#pragma mark - *** GBCustomBackgroundView *** -
-@interface GBCustomBackgroundView : UIView
-{}
-@property (nonatomic, assign) BOOL active;
-@end;
-
-#pragma mark - *** GBCustomCalloutArrow *** -
-@interface GBCustomCalloutArrow : UIView
-{}
-@property (nonatomic, assign) GBCustomCalloutArrowDirection direction;
-@property (nonatomic, assign) BOOL active;
-@end;
