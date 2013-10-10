@@ -14,10 +14,10 @@
 #define ARROW_HEIGHT                20.0
 #define ARROW_WIDTH                 30.0
 
-#define MIN_WIDTH_FOR_LEFT_CALLOUT  40.0
-#define MIN_WIDTH_FOR_RIGHT_CALLOUT 30.0
-#define MAX_WIDTH_FOR_LEFT_CALLOUT  40.0
-#define MAX_WIDTH_FOR_RIGHT_CALLOUT 40.0
+#define MAX_WIDTH_FOR_LEFT_CALLOUT   40.0
+#define MAX_WIDTH_FOR_RIGHT_CALLOUT  40.0
+#define MAX_HEIGHT_FOR_LEFT_CALLOUT  40.0
+#define MAX_HEIGHT_FOR_RIGHT_CALLOUT 40.0
 
 #define CALLOUT_HORZ_PADDING        10.0
 #define CALLOUT_VERT_PADDING        10.0
@@ -276,30 +276,6 @@ typedef void (^Callback)();
 
 
 // user defined layout adjustments
-- (NSNumber *)minWidthForLeftCallout
-{
-    return _minWidthForLeftCallout ? : (_minWidthForLeftCallout = [NSNumber numberWithFloat:MIN_WIDTH_FOR_LEFT_CALLOUT]);
-}
-
-
-- (NSNumber *)minWidthForRightCallout
-{
-    return _minWidthForRightCallout ? : (_minWidthForRightCallout = [NSNumber numberWithFloat:MIN_WIDTH_FOR_RIGHT_CALLOUT]);
-}
-
-
-- (NSNumber *)maxWidthForLeftCallout
-{
-    return _maxWidthForLeftCallout ? : (_maxWidthForLeftCallout = [NSNumber numberWithFloat:MAX_WIDTH_FOR_LEFT_CALLOUT]);
-}
-
-
-- (NSNumber *)maxWidthForRightCallout
-{
-    return _maxWidthForRightCallout ? : (_maxWidthForRightCallout = [NSNumber numberWithFloat:MAX_WIDTH_FOR_RIGHT_CALLOUT]);
-}
-
-
 - (NSNumber *)horizontalPadding
 {
     return _horizontalPadding ? : (_horizontalPadding = [NSNumber numberWithFloat:CALLOUT_HORZ_PADDING]);
@@ -414,6 +390,8 @@ typedef void (^Callback)();
     self.presentAnimation = GBCustomCalloutAnimationBounce;
     self.dismissAnimation = GBCustomCalloutAnimationFade;
     self.bubbleShape = YES;
+    self.maxSizeForLeftAccessory  = CGSizeMake(MAX_WIDTH_FOR_LEFT_CALLOUT,  MAX_HEIGHT_FOR_LEFT_CALLOUT);
+    self.maxSizeForRightAccessory = CGSizeMake(MAX_WIDTH_FOR_RIGHT_CALLOUT, MAX_HEIGHT_FOR_RIGHT_CALLOUT);
 }
 
 
@@ -590,14 +568,14 @@ typedef void (^Callback)();
         wrappingRect = [self rectFromAddingView:self.leftAccessoryView
                                          toRect:wrappingRect
                                          onEdge:CGRectMinXEdge
-                                        maxSize:[self getMaxLeftAccessorySize]];
+                                        maxSize:[self getMaxSizeWith:self.maxSizeForLeftAccessory]];
     }
     
     if (self.shouldConstrainRightAccessoryToContent) {
         wrappingRect = [self rectFromAddingView:self.rightAccessoryView
                                          toRect:wrappingRect
                                          onEdge:CGRectMaxXEdge
-                                        maxSize:[self getMaxRightAccessorySize]];
+                                        maxSize:[self getMaxSizeWith:self.maxSizeForRightAccessory]];
     }
     
     // save the middle row rect for use in positioning later
@@ -611,14 +589,14 @@ typedef void (^Callback)();
         wrappingRect = [self rectFromAddingView:self.leftAccessoryView
                                          toRect:wrappingRect
                                          onEdge:CGRectMinXEdge
-                                        maxSize:[self getMaxLeftAccessorySize]];
+                                        maxSize:[self getMaxSizeWith:self.maxSizeForLeftAccessory]];
     }
     
     if (!self.shouldConstrainRightAccessoryToContent) {
         wrappingRect = [self rectFromAddingView:self.rightAccessoryView
                                          toRect:wrappingRect
                                          onEdge:CGRectMaxXEdge
-                                        maxSize:[self getMaxRightAccessorySize]];
+                                        maxSize:[self getMaxSizeWith:self.maxSizeForRightAccessory]];
     }
     
     wrappingRect = [self rectFromAddingView:self.headerView toRect:wrappingRect onEdge:CGRectMinYEdge];
@@ -715,30 +693,12 @@ typedef void (^Callback)();
 }
 
 
-- (CGSize)getMaxLeftAccessorySize
+- (CGSize)getMaxSizeWith:(CGSize)maxSizeForAccessory
 {
-    CGSize maxLeftSize = CGRectInfinite.size;
-    if ( ! [self shouldExpandToAccessoryHeight] ) {
-        maxLeftSize.height = 20.0;
-    }
-    if ( ! [self shouldExpandToAccessoryWidth] ) {
-        maxLeftSize.width = [self.maxWidthForLeftCallout floatValue];
-    }
-    return maxLeftSize;
-}
-
-
-
-- (CGSize)getMaxRightAccessorySize
-{
-    CGSize maxRightSize = CGRectInfinite.size;
-    if ( ! [self shouldExpandToAccessoryHeight] ) {
-        maxRightSize.height = 40.0;
-    }
-    if ( ! [self shouldExpandToAccessoryWidth] ) {
-        maxRightSize.width = [self.maxWidthForRightCallout floatValue];
-    }
-    return maxRightSize;
+    CGSize maxSize = CGRectInfinite.size;
+    maxSize.width = [self shouldExpandToAccessoryWidth] ? CGRectInfinite.size.width : maxSizeForAccessory.width;
+    maxSize.height = [self shouldExpandToAccessoryHeight] ? CGRectInfinite.size.height : maxSizeForAccessory.height;
+    return maxSize;
 }
 
 

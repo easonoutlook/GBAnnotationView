@@ -16,18 +16,18 @@
 //@property (nonatomic, strong) UIView *rightAccessoryView;
 //@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIView *bottomView;
-//@property (nonatomic, strong) UIView *topView;
-//@property (nonatomic, strong) UIView *headerView;
-//@property (nonatomic, strong) UIView *footerView;
+@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIView *footerView;
 
 - (BOOL)shouldExpandToAccessoryHeight;
 - (BOOL)shouldExpandToAccessoryWidth;
 
-//- (BOOL)shouldVerticallyCenterLeftAccessory;
-//- (BOOL)shouldVerticallyCenterRightAccessory;
+- (BOOL)shouldVerticallyCenterLeftAccessory;
+- (BOOL)shouldVerticallyCenterRightAccessory;
 
-//- (BOOL)shouldConstrainLeftAccessoryToContent;
-//- (BOOL)shouldConstrainRightAccessoryToContent;
+- (BOOL)shouldConstrainLeftAccessoryToContent;
+- (BOOL)shouldConstrainRightAccessoryToContent;
 
 - (CGPoint)calloutOffset;
 

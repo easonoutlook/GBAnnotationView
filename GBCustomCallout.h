@@ -50,7 +50,8 @@ typedef enum {
 #pragma mark - Callout Modifications
 @property (nonatomic, assign) CGPoint offset;
 
-@property (nonatomic, strong) NSNumber *minWidthForLeftCallout, *minWidthForRightCallout, *maxWidthForLeftCallout, *maxWidthForRightCallout;
+@property (nonatomic, assign) CGSize maxSizeForLeftAccessory, maxSizeForRightAccessory;
+
 // space between map border and callout (on automove)
 @property (nonatomic, strong) NSNumber *horizontalMargin, *verticalMargin;
 // space around the subviews

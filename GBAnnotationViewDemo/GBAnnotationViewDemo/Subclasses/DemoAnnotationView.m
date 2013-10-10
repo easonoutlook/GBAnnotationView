@@ -71,7 +71,6 @@ static UIView *_bomAd;
         UIImage *image = [self imageWithImage:[UIImage imageNamed:annotation.title] scaledToSize:CGSizeMake(80.0, 120.0)];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         imageView.clipsToBounds = YES;
-        //imageView.frame = CGRectMake(0, 0, 40, 40);
         _leftCalloutAccessoryView = imageView;
     }
     return _leftCalloutAccessoryView;
@@ -79,16 +78,16 @@ static UIView *_bomAd;
 
 
 #pragma mark bottomView
-- (UIView *)bottomView
-{
-    if (!_bottomView) {
-        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 160, 25)];
-        bottomView.subject = self.annotation.title;
-        bottomView.clipsToBounds = YES;
-        _bottomView = bottomView;
-    }
-    return _bottomView;
-}
+//- (UIView *)bottomView
+//{
+//    if (!_bottomView) {
+//        GBRelatedInformationView *bottomView = [[GBRelatedInformationView alloc] initWithFrame:CGRectMake(0, 0, 160, 25)];
+//        bottomView.subject = self.annotation.title;
+//        bottomView.clipsToBounds = YES;
+//        _bottomView = bottomView;
+//    }
+//    return _bottomView;
+//}
 
 //
 //- (UIView *)bottomView
@@ -188,42 +187,41 @@ static UIView *_bomAd;
 //}
 
 
-#pragma mark Callout Modifications
+#pragma mark Callout Delegate Modifications
 - (CGPoint)calloutOffset
 {
     return CGPointMake(-8, 0);
 }
 
-//
-//- (BOOL)shouldConstrainLeftAccessoryToContent
-//{
-//    return self.bottomView ? YES : NO;
-//}
 
-//- (BOOL)shouldVerticallyCenterLeftAccessory
-//{
-//    return YES;
-//}
+- (BOOL)shouldConstrainLeftAccessoryToContent
+{
+    return self.bottomView ? YES : NO;
+}
 
-//
-//- (BOOL)shouldVerticallyCenterRightAccessory
-//{
-//    return YES;
-//}
+- (BOOL)shouldConstrainRightAccessoryToContent
+{
+    return NO;
+}
 
-//- (BOOL)shouldConstrainLeftAccessoryToContent
-//{
-//    return self.bottomView ? YES : NO;
-//}
-
-- (BOOL)shouldExpandToAccessoryHeight
+- (BOOL)shouldVerticallyCenterLeftAccessory
 {
     return YES;
 }
 
-- (BOOL)shouldExpandToAccessoryWidth
+- (BOOL)shouldVerticallyCenterRightAccessory
 {
     return YES;
+}
+
+- (BOOL)shouldExpandToAccessoryHeight
+{
+    return NO;
+}
+
+- (BOOL)shouldExpandToAccessoryWidth
+{
+    return NO;
 }
 
 #pragma mark - Utility
