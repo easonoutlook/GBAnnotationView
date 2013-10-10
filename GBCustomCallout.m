@@ -333,11 +333,9 @@ typedef void (^Callback)();
 {
     [self setDefaults];
     
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-        tap.delegate = self;
-        [self addGestureRecognizer:tap];
-    }
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    tap.delegate = self;
+    [self addGestureRecognizer:tap];
     
     // just to stop the map zoom on doubleTaps when tapping the callout
     UITapGestureRecognizer *dtap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
@@ -392,6 +390,7 @@ typedef void (^Callback)();
     self.bubbleShape = YES;
     self.maxSizeForLeftAccessory  = CGSizeMake(MAX_WIDTH_FOR_LEFT_CALLOUT,  MAX_HEIGHT_FOR_LEFT_CALLOUT);
     self.maxSizeForRightAccessory = CGSizeMake(MAX_WIDTH_FOR_RIGHT_CALLOUT, MAX_HEIGHT_FOR_RIGHT_CALLOUT);
+    self.calloutTapTriggersRightAccessory = YES;
 }
 
 
@@ -1095,13 +1094,23 @@ typedef void (^Callback)();
 #pragma mark - Actions
 - (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
-    [self activate];
+    if (self.calloutTapTriggersRightAccessory) {
+        [self activate];
+    }
 }
 
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
     // Do nothing, just absorb the double tap away from the mapview
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    if (self.calloutTapTriggersRightAccessory) {
+        return NO;
+    }
+    return YES;
 }
 
 

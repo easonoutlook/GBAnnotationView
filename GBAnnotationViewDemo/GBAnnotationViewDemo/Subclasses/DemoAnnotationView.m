@@ -58,6 +58,8 @@ static UIView *_bomAd;
         _calloutView = [GBCustomCallout new];
         _calloutView.delegate = self;
         _calloutView.verticalPadding = @10;
+        _calloutView.maxSizeForLeftAccessory = CGSizeMake(30, 30);
+        _calloutView.calloutTapTriggersRightAccessory = NO;
     }
     
     return _calloutView;

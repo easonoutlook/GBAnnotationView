@@ -67,6 +67,8 @@ typedef enum {
 
 @property (nonatomic, assign) BOOL bubbleShape;
 
+@property (nonatomic, assign) BOOL calloutTapTriggersRightAccessory;
+
 #pragma mark - Class methods
 + (GBCustomCallout *)customCalloutWithDelegate:(id<GBCustomCalloutViewDelegate>)delegate;
 
