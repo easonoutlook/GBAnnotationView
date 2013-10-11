@@ -21,7 +21,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <tabBarItem key="tabBarItem" title="Standard" id="v1s-dm-VxX"/>
+                    <tabBarItem key="tabBarItem" title="Standard" image="Location-icon" id="v1s-dm-VxX"/>
                     <navigationItem key="navigationItem" title="Standard Demo" id="gaQ-W6-dVJ">
                         <barButtonItem key="backBarButtonItem" title="To the Map!" id="Q98-zw-uN1"/>
                     </navigationItem>
@@ -58,11 +58,11 @@
             </objects>
             <point key="canvasLocation" x="1605" y="63"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Navigation Controller - Standard-->
         <scene sceneID="lBQ-CY-cQ0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xGc-w5-7ed" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="2yC-Kj-JeP"/>
+                    <tabBarItem key="tabBarItem" title="Standard" image="Location-icon" id="2yC-Kj-JeP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="lrm-4k-zXt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -89,7 +89,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="xGc-w5-7ed" kind="relationship" relationship="viewControllers" id="s4d-TF-67a"/>
-                        <segue destination="THd-zS-ICE" kind="relationship" relationship="viewControllers" id="3o1-UO-wLG"/>
+                        <segue destination="n0v-WT-aDY" kind="relationship" relationship="viewControllers" id="3o1-UO-wLG"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLN-js-h6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -97,35 +97,56 @@
             </objects>
             <point key="canvasLocation" x="245" y="63"/>
         </scene>
-        <!--Rampage View Controller - Demo-->
+        <!--Rampage View Controller - Rampage Demo-->
         <scene sceneID="H01-z1-IJe">
             <objects>
                 <viewController id="THd-zS-ICE" customClass="GBRampageViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="p1M-KB-tuw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <view key="view" contentMode="scaleToFill" id="sXc-b9-grv">
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="sn3-BO-mrQ" customClass="GBMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="xcK-Es-2pb" customClass="GBMapView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="454"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <tabBarItem key="tabBarItem" title="Rampage" id="KuN-P4-Muf"/>
-                    <navigationItem key="navigationItem" title="Demo" id="6RG-9i-n6t">
-                        <barButtonItem key="backBarButtonItem" title="To the Map!" id="pOd-T8-PSY"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Rampage Demo" id="6RG-9i-n6t"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <connections>
-                        <outlet property="mapView" destination="sn3-BO-mrQ" id="Q8w-s1-4FT"/>
+                        <outlet property="mapView" destination="xcK-Es-2pb" id="YsK-ie-ofU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hhn-EV-N9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1713" y="741"/>
+        </scene>
+        <!--Navigation Controller - Rampage-->
+        <scene sceneID="qQE-3O-iuB">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="n0v-WT-aDY" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Rampage" image="DinoHead" id="KuN-P4-Muf"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Lb2-fd-YLm">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="THd-zS-ICE" kind="relationship" relationship="rootViewController" id="t1j-bX-7vm"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bi3-ed-oyQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="1187" y="741"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="DinoHead" width="48" height="48"/>
+        <image name="Location-icon" width="32" height="32"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

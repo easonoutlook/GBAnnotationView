@@ -787,7 +787,6 @@ typedef void (^Callback)();
 - (void)addBubbleMask
 {
     CGRect b = self.layer.bounds;
-    
     self.maskLayer.frame = b;
     
     CGPoint anchorPoint = [self.annotationView convertPoint:self.annotationAnchorPoint toView:self];

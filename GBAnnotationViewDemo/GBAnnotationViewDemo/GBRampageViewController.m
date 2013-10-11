@@ -58,8 +58,8 @@
 	[self.mapView addAnnotations:self.mapAnnotations];
     
     MKCoordinateRegion newRegion;
-    newRegion.center.latitude = 40.739623;
-    newRegion.center.longitude = -74.006605;
+    newRegion.center.latitude = 40.730623;
+    newRegion.center.longitude = -74.000605;
     newRegion.span.latitudeDelta = 0.112872;
     newRegion.span.longitudeDelta = 0.109863;
     

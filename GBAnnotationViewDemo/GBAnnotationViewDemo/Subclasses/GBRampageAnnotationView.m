@@ -8,6 +8,7 @@
 
 #import "GBRampageAnnotationView.h"
 #import "GBMonsterStatsView.h"
+#import "AttackOptions.h"
 
 @interface GBRampageAnnotationView()
 @property (nonatomic, readonly) UIImage *standardPinImage;
@@ -23,6 +24,8 @@
 {
     if (!_calloutView) {
         _calloutView = [GBCustomCallout new];
+        _calloutView.backgroundColor = [self calloutBackgroundColor];
+        _calloutView.activeBackgroundColor = [self calloutBackgroundColor];
         _calloutView.delegate = self;
     }
     
@@ -47,6 +50,14 @@
         _leftCalloutAccessoryView = imageView;
     }
     return _leftCalloutAccessoryView;
+}
+
+- (UIView *)bottomView
+{
+    if (!_bottomView) {
+        _bottomView = [[NSBundle mainBundle] loadNibNamed:@"AttackOptions" owner:self options:nil][0];
+    }
+    return _bottomView;
 }
 
 
@@ -123,6 +134,18 @@
     return imageView;
 }
 
+
+- (UIColor *)calloutBackgroundColor
+{
+//    CGFloat red = 239.0/255.0;
+//    CGFloat green = 237.0/255.0;
+//    CGFloat blue = 250.0/255.0;
+//    CGFloat alpha = 1.0;
+//    UIColor *color = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+    UIColor *color = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"rampage-bg"]];
+    return color;
+}
+
 #pragma mark Callout Delegate Modifications
 - (UIView *)rightAccessoryView
 {
@@ -132,6 +155,11 @@
 - (CGPoint)calloutOffset
 {
     return CGPointMake(0, -3);
+}
+
+- (BOOL)shouldConstrainLeftAccessoryToContent
+{
+    return YES;
 }
 
 - (BOOL)shouldExpandToAccessoryHeight
