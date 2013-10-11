@@ -10,7 +10,7 @@
 #import "GBAnnotation.h"
 #import "GBRelatedInformationView.h"
 
-static UIView *_bomAd;
+static UIView *_expandingView;
 
 @interface DemoAnnotationView ()
 @property (nonatomic, readonly) UIImage *standardPinImage;
@@ -59,7 +59,6 @@ static UIView *_bomAd;
         _calloutView.delegate = self;
         _calloutView.verticalPadding = @10;
         _calloutView.maxSizeForLeftAccessory = CGSizeMake(30, 30);
-        _calloutView.calloutTapTriggersRightAccessory = NO;
     }
     
     return _calloutView;
@@ -103,34 +102,34 @@ static UIView *_bomAd;
 //    return _bottomView;
 //}
 //
-//- (UIView *)bottomView
-//{
-//    if (!_bomAd) {
-//        _bomAd = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
-//        _bomAd.backgroundColor = [UIColor blueColor];
-//        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
-//        tap.delegate = self;
-//        [_bomAd addGestureRecognizer:tap];
-//    }
-//    return _bomAd;
-//}
+- (UIView *)bottomView
+{
+    if (!_expandingView) {
+        _expandingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
+        _expandingView.backgroundColor = [UIColor blueColor];
+        UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewTapped:)];
+        tap.delegate = self;
+        [_expandingView addGestureRecognizer:tap];
+    }
+    return _expandingView;
+}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return NO;
 }
 
-//- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
-//{
-//    UIView *view = gestureRecognizer.view;
-//    CGRect f = view.frame;
-//    
-//    int r = arc4random() % 50;
-//    int spread = (f.size.height == 20) ? 0 : 25;
-//    f.size = CGSizeMake(f.size.width, MAX(20, f.size.height + (r-spread)));
-//    
-//    view.frame = f;
-//}
+- (void)bottomViewTapped:(UIGestureRecognizer *)gestureRecognizer
+{
+    UIView *view = gestureRecognizer.view;
+    CGRect f = view.frame;
+    
+    int r = arc4random() % 50;
+    int spread = (f.size.height == 20) ? 0 : 25;
+    f.size = CGSizeMake(f.size.width, MAX(20, f.size.height + (r-spread)));
+    
+    view.frame = f;
+}
 //
 //- (UIView *)contentView
 //{
@@ -198,7 +197,8 @@ static UIView *_bomAd;
 
 - (BOOL)shouldConstrainLeftAccessoryToContent
 {
-    return self.bottomView ? YES : NO;
+    // return self.bottomView ? YES : NO;
+    return NO;
 }
 
 - (BOOL)shouldConstrainRightAccessoryToContent

@@ -18,13 +18,18 @@
 		90712C9417F4D1E7003ABAF0 /* DemoAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9317F4D1E7003ABAF0 /* DemoAnnotationView.m */; };
 		90712C9817F4D8B8003ABAF0 /* GBAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9717F4D8B8003ABAF0 /* GBAnnotation.m */; };
 		90712C9C17F4F082003ABAF0 /* GBRelatedInformationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90712C9B17F4F082003ABAF0 /* GBRelatedInformationView.m */; };
+		90955DD31807529200E9DABD /* GBRampageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 90955DD21807529200E9DABD /* GBRampageViewController.m */; };
+		90955DD6180753BF00E9DABD /* GBRampageAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 90955DD5180753BF00E9DABD /* GBRampageAnnotation.m */; };
+		90955DD9180754D700E9DABD /* GBMonster.m in Sources */ = {isa = PBXBuildFile; fileRef = 90955DD8180754D700E9DABD /* GBMonster.m */; };
+		90955DDC18075A6600E9DABD /* GBRampageAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90955DDB18075A6600E9DABD /* GBRampageAnnotationView.m */; };
+		90955DDE180763AA00E9DABD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90955DDD180763AA00E9DABD /* Images.xcassets */; };
+		90955DE11807728300E9DABD /* GBMonsterStatsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 90955DE01807728300E9DABD /* GBMonsterStatsView.m */; };
 		90E42B6F17F492F300444885 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B6E17F492F300444885 /* Foundation.framework */; };
 		90E42B7117F492F300444885 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7017F492F300444885 /* CoreGraphics.framework */; };
 		90E42B7317F492F300444885 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7217F492F300444885 /* UIKit.framework */; };
 		90E42B7917F492F300444885 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 90E42B7717F492F300444885 /* InfoPlist.strings */; };
 		90E42B7B17F492F300444885 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E42B7A17F492F300444885 /* main.m */; };
 		90E42B7F17F492F300444885 /* GBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 90E42B7E17F492F300444885 /* GBAppDelegate.m */; };
-		90E42B8117F492F300444885 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90E42B8017F492F300444885 /* Images.xcassets */; };
 		90E42B8817F492F300444885 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B8717F492F300444885 /* XCTest.framework */; };
 		90E42B8917F492F300444885 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B6E17F492F300444885 /* Foundation.framework */; };
 		90E42B8A17F492F300444885 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E42B7217F492F300444885 /* UIKit.framework */; };
@@ -64,6 +69,17 @@
 		90712C9717F4D8B8003ABAF0 /* GBAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBAnnotation.m; sourceTree = "<group>"; };
 		90712C9A17F4F082003ABAF0 /* GBRelatedInformationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBRelatedInformationView.h; sourceTree = "<group>"; };
 		90712C9B17F4F082003ABAF0 /* GBRelatedInformationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBRelatedInformationView.m; sourceTree = "<group>"; };
+		90955DD11807529200E9DABD /* GBRampageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBRampageViewController.h; sourceTree = "<group>"; };
+		90955DD21807529200E9DABD /* GBRampageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBRampageViewController.m; sourceTree = "<group>"; };
+		90955DD4180753BF00E9DABD /* GBRampageAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBRampageAnnotation.h; sourceTree = "<group>"; };
+		90955DD5180753BF00E9DABD /* GBRampageAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBRampageAnnotation.m; sourceTree = "<group>"; };
+		90955DD7180754D700E9DABD /* GBMonster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBMonster.h; sourceTree = "<group>"; };
+		90955DD8180754D700E9DABD /* GBMonster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBMonster.m; sourceTree = "<group>"; };
+		90955DDA18075A6600E9DABD /* GBRampageAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBRampageAnnotationView.h; sourceTree = "<group>"; };
+		90955DDB18075A6600E9DABD /* GBRampageAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBRampageAnnotationView.m; sourceTree = "<group>"; };
+		90955DDD180763AA00E9DABD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		90955DDF1807728300E9DABD /* GBMonsterStatsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBMonsterStatsView.h; sourceTree = "<group>"; };
+		90955DE01807728300E9DABD /* GBMonsterStatsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBMonsterStatsView.m; sourceTree = "<group>"; };
 		90E42B6B17F492F300444885 /* GBAnnotationViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GBAnnotationViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E42B6E17F492F300444885 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		90E42B7017F492F300444885 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -74,7 +90,6 @@
 		90E42B7C17F492F300444885 /* GBAnnotationViewDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GBAnnotationViewDemo-Prefix.pch"; sourceTree = "<group>"; };
 		90E42B7D17F492F300444885 /* GBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GBAppDelegate.h; sourceTree = "<group>"; };
 		90E42B7E17F492F300444885 /* GBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GBAppDelegate.m; sourceTree = "<group>"; };
-		90E42B8017F492F300444885 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		90E42B8617F492F300444885 /* GBAnnotationViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GBAnnotationViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E42B8717F492F300444885 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		90E42B9D17F4938D00444885 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -114,12 +129,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		90712C8E17F4C253003ABAF0 /* Subclasses */ = {
+		90712C8E17F4C253003ABAF0 /* Usage Demonstration */ = {
 			isa = PBXGroup;
 			children = (
 				90712C9217F4D1E7003ABAF0 /* DemoAnnotationView.h */,
 				90712C9317F4D1E7003ABAF0 /* DemoAnnotationView.m */,
+				90955DDA18075A6600E9DABD /* GBRampageAnnotationView.h */,
+				90955DDB18075A6600E9DABD /* GBRampageAnnotationView.m */,
 			);
+			name = "Usage Demonstration";
 			path = Subclasses;
 			sourceTree = "<group>";
 		};
@@ -130,6 +148,8 @@
 				90712C8A17F4B5AD003ABAF0 /* ViewController.m */,
 				90712C8F17F4C5C3003ABAF0 /* DetailViewController.h */,
 				90712C9017F4C5C3003ABAF0 /* DetailViewController.m */,
+				90955DD11807529200E9DABD /* GBRampageViewController.h */,
+				90955DD21807529200E9DABD /* GBRampageViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -139,8 +159,23 @@
 			children = (
 				90712C9A17F4F082003ABAF0 /* GBRelatedInformationView.h */,
 				90712C9B17F4F082003ABAF0 /* GBRelatedInformationView.m */,
+				90955DDF1807728300E9DABD /* GBMonsterStatsView.h */,
+				90955DE01807728300E9DABD /* GBMonsterStatsView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		90955DD018074F3A00E9DABD /* Annotations */ = {
+			isa = PBXGroup;
+			children = (
+				90712C9617F4D8B8003ABAF0 /* GBAnnotation.h */,
+				90712C9717F4D8B8003ABAF0 /* GBAnnotation.m */,
+				90955DD4180753BF00E9DABD /* GBRampageAnnotation.h */,
+				90955DD5180753BF00E9DABD /* GBRampageAnnotation.m */,
+				90955DD7180754D700E9DABD /* GBMonster.h */,
+				90955DD8180754D700E9DABD /* GBMonster.m */,
+			);
+			name = Annotations;
 			sourceTree = "<group>";
 		};
 		90E42B6217F492F300444885 = {
@@ -181,17 +216,14 @@
 		90E42B7417F492F300444885 /* GBAnnotationViewDemo */ = {
 			isa = PBXGroup;
 			children = (
-				90712C9617F4D8B8003ABAF0 /* GBAnnotation.h */,
-				90712C9717F4D8B8003ABAF0 /* GBAnnotation.m */,
 				90E42BB117F49B6400444885 /* GBAnnotationView */,
-				90712C8E17F4C253003ABAF0 /* Subclasses */,
+				90712C8E17F4C253003ABAF0 /* Usage Demonstration */,
+				90955DDD180763AA00E9DABD /* Images.xcassets */,
 				90E42BA117F4988200444885 /* iphone.storyboard */,
-				90E42B8017F492F300444885 /* Images.xcassets */,
 				90712C9517F4D856003ABAF0 /* View Controllers */,
 				90712C9917F4F04C003ABAF0 /* Views */,
 				90E42B7517F492F300444885 /* Supporting Files */,
-				90E42B7D17F492F300444885 /* GBAppDelegate.h */,
-				90E42B7E17F492F300444885 /* GBAppDelegate.m */,
+				90955DD018074F3A00E9DABD /* Annotations */,
 			);
 			path = GBAnnotationViewDemo;
 			sourceTree = "<group>";
@@ -199,6 +231,8 @@
 		90E42B7517F492F300444885 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				90E42B7D17F492F300444885 /* GBAppDelegate.h */,
+				90E42B7E17F492F300444885 /* GBAppDelegate.m */,
 				90E42B7617F492F300444885 /* GBAnnotationViewDemo-Info.plist */,
 				90E42B7717F492F300444885 /* InfoPlist.strings */,
 				90E42B7A17F492F300444885 /* main.m */,
@@ -318,9 +352,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90955DDE180763AA00E9DABD /* Images.xcassets in Resources */,
 				90E42BA217F4988200444885 /* iphone.storyboard in Resources */,
 				90E42B7917F492F300444885 /* InfoPlist.strings in Resources */,
-				90E42B8117F492F300444885 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,13 +405,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90955DDC18075A6600E9DABD /* GBRampageAnnotationView.m in Sources */,
 				90712C8B17F4B5AD003ABAF0 /* ViewController.m in Sources */,
+				90955DD6180753BF00E9DABD /* GBRampageAnnotation.m in Sources */,
 				90712C8717F4AAA5003ABAF0 /* GBCustomCallout.m in Sources */,
 				90712C9C17F4F082003ABAF0 /* GBRelatedInformationView.m in Sources */,
 				90712C9417F4D1E7003ABAF0 /* DemoAnnotationView.m in Sources */,
 				90712C9817F4D8B8003ABAF0 /* GBAnnotation.m in Sources */,
 				90E42B7B17F492F300444885 /* main.m in Sources */,
 				90E42B7F17F492F300444885 /* GBAppDelegate.m in Sources */,
+				90955DD9180754D700E9DABD /* GBMonster.m in Sources */,
+				90955DE11807728300E9DABD /* GBMonsterStatsView.m in Sources */,
+				90955DD31807529200E9DABD /* GBRampageViewController.m in Sources */,
 				90712C8617F4AAA5003ABAF0 /* GBAnnotationView.m in Sources */,
 				90712C8817F4AAA5003ABAF0 /* GBMapView.m in Sources */,
 				90712C9117F4C5C3003ABAF0 /* DetailViewController.m in Sources */,

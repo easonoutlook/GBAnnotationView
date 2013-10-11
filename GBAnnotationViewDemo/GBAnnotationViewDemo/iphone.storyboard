@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="xGc-w5-7ed">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ZU5-gv-7Or">
     <dependencies>
         <deployment defaultVersion="1280" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
-        <!--View Controller - Demo-->
+        <!--View Controller - Standard Demo-->
         <scene sceneID="lVD-7R-uYN">
             <objects>
                 <viewController id="KUP-rG-HuM" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Pzw-ID-zou">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="0pF-oj-N0V" customClass="GBMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="Demo" id="gaQ-W6-dVJ">
+                    <tabBarItem key="tabBarItem" title="Standard" id="v1s-dm-VxX"/>
+                    <navigationItem key="navigationItem" title="Standard Demo" id="gaQ-W6-dVJ">
                         <barButtonItem key="backBarButtonItem" title="To the Map!" id="Q98-zw-uN1"/>
                     </navigationItem>
                     <connections>
@@ -31,18 +32,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q4f-wb-rlU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="661" y="63"/>
+            <point key="canvasLocation" x="1187" y="63"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="9GA-Hw-U8g">
             <objects>
                 <viewController id="27G-be-nji" customClass="DetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xin-II-nA9">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Qi1-z1-LhQ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                         </subviews>
@@ -55,12 +56,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kgw-BE-ySv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1079" y="63"/>
+            <point key="canvasLocation" x="1605" y="63"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Item-->
         <scene sceneID="lBQ-CY-cQ0">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xGc-w5-7ed" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="2yC-Kj-JeP"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="lrm-4k-zXt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -68,12 +70,60 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="KUP-rG-HuM" kind="relationship" relationship="rootViewController" id="doQ-Cx-msw"/>
+                        <segue destination="KUP-rG-HuM" kind="relationship" relationship="rootViewController" id="3Vp-3j-daV"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0yx-8I-ZXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="135" y="63"/>
+            <point key="canvasLocation" x="805" y="63"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="sgD-FV-7eU">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="ZU5-gv-7Or" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="cNa-pL-Dnx">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="xGc-w5-7ed" kind="relationship" relationship="viewControllers" id="s4d-TF-67a"/>
+                        <segue destination="THd-zS-ICE" kind="relationship" relationship="viewControllers" id="3o1-UO-wLG"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JLN-js-h6O" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tabBarItem title="Rampage" id="cje-5N-kai"/>
+            </objects>
+            <point key="canvasLocation" x="245" y="63"/>
+        </scene>
+        <!--Rampage View Controller - Demo-->
+        <scene sceneID="H01-z1-IJe">
+            <objects>
+                <viewController id="THd-zS-ICE" customClass="GBRampageViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="p1M-KB-tuw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="sn3-BO-mrQ" customClass="GBMapView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <tabBarItem key="tabBarItem" title="Rampage" id="KuN-P4-Muf"/>
+                    <navigationItem key="navigationItem" title="Demo" id="6RG-9i-n6t">
+                        <barButtonItem key="backBarButtonItem" title="To the Map!" id="pOd-T8-PSY"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="mapView" destination="sn3-BO-mrQ" id="Q8w-s1-4FT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hhn-EV-N9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1187" y="741"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

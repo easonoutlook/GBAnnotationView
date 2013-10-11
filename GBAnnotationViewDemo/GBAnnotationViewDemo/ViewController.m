@@ -17,7 +17,6 @@
 @property (weak, nonatomic) IBOutlet GBMapView *mapView;
 
 @property (nonatomic, strong) NSArray *mapAnnotations;
-@property (nonatomic, strong) NSString *nameHolder;
 
 @end
 
