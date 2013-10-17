@@ -491,6 +491,8 @@ typedef void (^Callback)();
 
 - (void)addSubviews
 {
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
     [self addSubview:self.contentView];
     [self addSubview:self.topView];
     [self addSubview:self.bottomView];
