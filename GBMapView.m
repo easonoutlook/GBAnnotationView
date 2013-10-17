@@ -128,37 +128,65 @@
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
-    
+    if (self.didAddAnnotationViews) {
+        self.didAddAnnotationViews(self, views);
+    }
 }
 
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    
+    if (self.regionWillChange) {
+        self.regionWillChange(self, animated);
+    }
 }
 
 
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    
+    if (self.regionDidChange) {
+        self.regionDidChange(self, animated);
+    }
 }
 
 
 - (void)mapViewWillStartLoadingMap:(MKMapView *)mapView
 {
-    
+    if (self.willStartLoadingMap) {
+        self.willStartLoadingMap(self);
+    }
 }
 
 
 - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView
 {
-    
+    if (self.didFinishLoadingMap) {
+        self.didFinishLoadingMap(self);
+    }
 }
 
 
 - (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error
 {
-    
+    if (self.didFailLoadingMap) {
+        self.didFailLoadingMap(self, error);
+    }
+}
+
+
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    if (self.didUpdateUserLocation) {
+        self.didUpdateUserLocation(self, userLocation);
+    }
+}
+
+
+- (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{
+    if (self.didFailToLocateUser) {
+        self.didFailToLocateUser(self, error);
+    }
 }
 
 // user tapped the disclosure button in the callout
