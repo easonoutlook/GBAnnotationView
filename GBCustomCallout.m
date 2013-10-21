@@ -891,7 +891,7 @@ typedef void (^Callback)();
 
 - (void)animateInWithType:(GBCustomCalloutAnimation)type
 {
-    __block GBCustomCallout *_self = self;
+    __block typeof(self) _self = self;
     
     if (type == GBCustomCalloutAnimationFade) {
         self.alpha = 0;
@@ -917,7 +917,7 @@ typedef void (^Callback)();
 
 - (Callback)animationFadeIn
 {
-    __block GBCustomCallout *_self = self;
+    __block typeof(self) _self = self;
     return [^{
         _self.alpha = 1;
     } copy];
@@ -926,7 +926,7 @@ typedef void (^Callback)();
 
 - (Callback)animationFadeOut
 {
-    __block GBCustomCallout *_self = self;
+    __block typeof(self) _self = self;
     return [^{
         _self.alpha = 0;
     } copy];
@@ -935,7 +935,7 @@ typedef void (^Callback)();
 
 - (Callback)animationScale:(CGFloat)scaleFactor
 {
-    __block GBCustomCallout *_self = self;
+    __block typeof(self) _self = self;
     return [^{
         _self.transform = CGAffineTransformMakeScale(scaleFactor, scaleFactor);
     } copy];
@@ -944,7 +944,7 @@ typedef void (^Callback)();
 
 - (Callback)animationResetTransform
 {
-    __block GBCustomCallout *_self = self;
+    __block typeof(self) _self = self;
     return [^{
         _self.transform = CGAffineTransformIdentity;
     } copy];
@@ -953,7 +953,7 @@ typedef void (^Callback)();
 
 - (void)animateOutWithType:(GBCustomCalloutAnimation)type
 {
-    __block GBCustomCallout *_self = self;
+    __block typeof(self) _self = self;
     
     if (type == GBCustomCalloutAnimationBounce) {
         [self setLayerAnchorFromAnnotationAnchorPoint];
