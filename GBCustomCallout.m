@@ -823,8 +823,9 @@ typedef void (^Callback)();
 {
     BOOL pointingDown = (self.arrowDirection == GBCustomCalloutArrowDirectionDown);
     CGRectEdge edge = pointingDown ? CGRectMaxYEdge : CGRectMinYEdge;
-    CGMutablePathRef path = [self trianglePathForRect:arrowLayer.bounds pointingAtEdge:edge];
+    CGMutablePathRef path = [self newTrianglePathForRect:arrowLayer.bounds pointingAtEdge:edge];
     arrowLayer.path = path;
+    CGPathRelease(path);
 }
 
 
@@ -839,13 +840,7 @@ typedef void (^Callback)();
 }
 
 
-- (CGMutablePathRef)trianglePathForRect:(CGRect)rect
-{
-    return [self trianglePathForRect:rect pointingAtEdge:CGRectMaxYEdge];
-}
-
-
-- (CGMutablePathRef)trianglePathForRect:(CGRect)rect pointingAtEdge:(CGRectEdge)edge
+- (CGMutablePathRef)newTrianglePathForRect:(CGRect)rect pointingAtEdge:(CGRectEdge)edge
 {
     CGMutablePathRef path = CGPathCreateMutable();
     
@@ -1049,7 +1044,9 @@ typedef void (^Callback)();
                                             inRect:contrainingRect];
         [self moveMapByOffset:offset then:callback];
     } else {
-        callback();
+        if (callback) {
+            callback();
+        }
     }
 }
 
