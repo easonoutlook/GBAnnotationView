@@ -441,17 +441,17 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      |             Header View                |
-     |||________________________________________|
+     ||||________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     |||Access..|      - titleView   |Accessor..|
+     ||||Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     |||________________________________________|
+     ||||________________________________________|
      */
     
     if (!self.annotationView) return;
@@ -1176,15 +1176,7 @@ typedef void (^Callback)();
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    CGSize sizeThatFits = [super sizeThatFits:size];
-    
-    if (!CGSizeEqualToSize(self.maxSize, CGSizeZero) ) {
-        CGFloat maxWidth  = MIN(sizeThatFits.width, self.maxSize.width);
-        CGFloat maxHeight = MIN(sizeThatFits.height, self.maxSize.height);
-        sizeThatFits = CGSizeMake(maxWidth, maxHeight);
-    }
-    
-    return sizeThatFits;
+    return [super sizeThatFits:self.maxSize];
 }
 
 
@@ -1245,9 +1237,9 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      | Title                                  |
-     ||||________________________________________|
+     |||||________________________________________|
      | Subtitle                               |
-     ||||________________________________________|
+     |||||________________________________________|
      */
     __block CGFloat y = 0;
     
