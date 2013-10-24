@@ -74,9 +74,9 @@ typedef enum {
 
 #pragma mark - Instance Methods
 - (void)presentCalloutForAnnotationView:(MKAnnotationView *)annotationView
-                                 inMapView:(MKMapView *)mapView;
+                              inMapView:(MKMapView *)mapView;
 
-- (void)dismiss;
+- (void)             dismiss;
 
 @end
 
@@ -85,34 +85,34 @@ typedef enum {
 @protocol GBCustomCalloutViewDelegate <NSObject>
 
 // Title and subtitle for use by selection UI.
-- (NSString *)title;
-- (NSString *)subtitle;
+- (NSString *)       title;
+- (NSString *)       subtitle;
 
 @optional
 
-- (UIView *)titleView;
-- (UIView *)subtitleView;
-- (UIView *)contentView;
+- (UIView *)         titleView;
+- (UIView *)         subtitleView;
+- (UIView *)         contentView;
 
-- (UIView *)leftAccessoryView;
-- (UIView *)rightAccessoryView;
+- (UIView *)         leftAccessoryView;
+- (UIView *)         rightAccessoryView;
 
-- (UIView *)topView;
-- (UIView *)bottomView;
+- (UIView *)         topView;
+- (UIView *)         bottomView;
 
-- (UIView *)headerView;
-- (UIView *)footerView;
+- (UIView *)         headerView;
+- (UIView *)         footerView;
 
-- (UIView *)backgroundView;
+- (UIView *)         backgroundView;
 
-- (CGPoint)calloutOffset;
+- (CGPoint)          calloutOffset;
 
-- (BOOL)shouldExpandToAccessoryHeight;
-- (BOOL)shouldExpandToAccessoryWidth;
-- (BOOL)shouldVerticallyCenterLeftAccessory;
-- (BOOL)shouldVerticallyCenterRightAccessory;
-- (BOOL)shouldConstrainLeftAccessoryToContent;
-- (BOOL)shouldConstrainRightAccessoryToContent;
+- (BOOL)             shouldExpandToAccessoryHeight;
+- (BOOL)             shouldExpandToAccessoryWidth;
+- (BOOL)             shouldVerticallyCenterLeftAccessory;
+- (BOOL)             shouldVerticallyCenterRightAccessory;
+- (BOOL)             shouldConstrainLeftAccessoryToContent;
+- (BOOL)             shouldConstrainRightAccessoryToContent;
 
 @end
 

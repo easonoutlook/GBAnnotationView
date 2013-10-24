@@ -5,7 +5,6 @@
 //  Created by Adam Barrett on 2013-09-06.
 //
 //
-
 #import "GBAnnotationView.h"
 
 static UIImage *_standardPinImage;
@@ -93,6 +92,7 @@ static UIView *_rightCalloutAccessoryView;
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     UIView *calloutMaybe = [self.calloutView hitTest:[self.calloutView convertPoint:point fromView:self] withEvent:event];
+    
     return calloutMaybe ? : [super hitTest:point withEvent:event];
 }
 
@@ -147,5 +147,6 @@ static UIView *_rightCalloutAccessoryView;
 {
     return self.rightCalloutAccessoryView;
 }
+
 
 @end

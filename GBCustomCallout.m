@@ -10,25 +10,25 @@
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
-#define CORNER_RADIUS               10.0
-#define ARROW_HEIGHT                20.0
-#define ARROW_WIDTH                 30.0
+#define CORNER_RADIUS                10.0
+#define ARROW_HEIGHT                 20.0
+#define ARROW_WIDTH                  30.0
 
 #define MAX_WIDTH_FOR_LEFT_CALLOUT   40.0
 #define MAX_WIDTH_FOR_RIGHT_CALLOUT  40.0
 #define MAX_HEIGHT_FOR_LEFT_CALLOUT  40.0
 #define MAX_HEIGHT_FOR_RIGHT_CALLOUT 40.0
 
-#define CALLOUT_HORZ_PADDING        10.0
-#define CALLOUT_VERT_PADDING        10.0
+#define CALLOUT_HORZ_PADDING         10.0
+#define CALLOUT_VERT_PADDING         10.0
 
-#define CALLOUT_MARGIN_HORZ         10.0
-#define CALLOUT_MARGIN_VERT         10.0
+#define CALLOUT_MARGIN_HORZ          10.0
+#define CALLOUT_MARGIN_VERT          10.0
 
-#define SUBVIEW_HORZ_MARGIN         10.0
-#define SUBVIEW_VERT_MARGIN         10.0
+#define SUBVIEW_HORZ_MARGIN          10.0
+#define SUBVIEW_VERT_MARGIN          10.0
 
-#define ANCHOR_MARGIN               50.0
+#define ANCHOR_MARGIN                50.0
 
 typedef void (^Callback)();
 
@@ -210,7 +210,7 @@ typedef void (^Callback)();
 
 - (UIColor *)activeBackgroundColor
 {
-    return _activeBackgroundColor ?: (_activeBackgroundColor = [UIColor colorWithWhite:0.85 alpha:1]);
+    return _activeBackgroundColor ? : (_activeBackgroundColor = [UIColor colorWithWhite:0.85 alpha:1]);
 }
 
 
@@ -221,13 +221,14 @@ typedef void (^Callback)();
         _maskLayer.cornerRadius = CORNER_RADIUS;
         _maskLayer.backgroundColor = [[UIColor colorWithWhite:0.5 alpha:1] CGColor];
     }
+    
     return _maskLayer;
 }
 
 
 - (CAShapeLayer *)arrowLayer
 {
-    return _arrowLayer ?: (_arrowLayer = [CAShapeLayer layer]);
+    return _arrowLayer ? : (_arrowLayer = [CAShapeLayer layer]);
 }
 
 
@@ -380,6 +381,7 @@ typedef void (^Callback)();
     return self;
 }
 
+
 - (void)setDefaults
 {
     self.backgroundColor = [UIColor whiteColor];
@@ -434,17 +436,17 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      |             Header View                |
-     |________________________________________|
+     ||________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     |Access..|      - titleView   |Accessor..|
+     ||Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     |________________________________________|
+     ||________________________________________|
      */
     
     if (!self.annotationView) return;
@@ -504,6 +506,7 @@ typedef void (^Callback)();
     [self bringSubviewToFront:self.contentView];
 }
 
+
 - (CGRect)determineContraintRectWith:(MKMapView *)mapView
                     inAnnotationView:(MKAnnotationView *)annotationView
 {
@@ -518,7 +521,7 @@ typedef void (^Callback)();
     
     BOOL any = self.allowedArrowDirections == GBCustomCalloutArrowDirectionAny;
     BOOL up  = self.allowedArrowDirections & GBCustomCalloutArrowDirectionUp;
-    BOOL onlyup= self.allowedArrowDirections == GBCustomCalloutArrowDirectionUp;
+    BOOL onlyup = self.allowedArrowDirections == GBCustomCalloutArrowDirectionUp;
     
     // do we allow it to point up?
     if ((any || up) && !onlyup) {
@@ -629,8 +632,7 @@ typedef void (^Callback)();
     CGPoint origin;
     
     switch (edge) {
-        case CGRectMinXEdge:
-        {
+        case CGRectMinXEdge: {
             CGFloat width = MIN(CGRectGetWidth(view.frame), maxSize.width);
             origin = CGPointMake(-(width + horzMargin), 0);
         }
@@ -640,8 +642,7 @@ typedef void (^Callback)();
             origin = CGPointMake(CGRectGetMaxX(rect) + horzMargin, 0);
             break;
             
-        case CGRectMinYEdge:
-        {
+        case CGRectMinYEdge: {
             CGFloat height = MIN(CGRectGetHeight(view.frame), maxSize.height);
             origin = CGPointMake(CGRectGetMinX(rect), -(height + vertMargin));
         }
@@ -658,11 +659,11 @@ typedef void (^Callback)();
 }
 
 
-- (CGRect)wrappingRect:(CGRect)rect
- forPositioningSubview:(UIView *)subview
-               atPoint:(CGPoint)point
-               maxSize:(CGSize)maxSize
-               forEdge:(CGRectEdge)edge
+- (CGRect)   wrappingRect:(CGRect)rect
+    forPositioningSubview:(UIView *)subview
+                  atPoint:(CGPoint)point
+                  maxSize:(CGSize)maxSize
+                  forEdge:(CGRectEdge)edge
 {
     if (!subview) return rect;
     
@@ -670,13 +671,14 @@ typedef void (^Callback)();
     f.origin = point;
     subview.frame = f;
     
-    if ( ! CGSizeEqualToSize(maxSize, CGRectInfinite.size) ) {
+    if (!CGSizeEqualToSize(maxSize, CGRectInfinite.size) ) {
         CGFloat width = MIN(f.size.width, maxSize.width);
         CGFloat height = MIN(f.size.height, maxSize.height);
-
+        
         CGRect m = CGRectMake(f.origin.x, f.origin.y, width, height);
         
         CGFloat x = CGRectGetMinX(m);
+        
         if (edge == CGRectMinXEdge) {
             x = CGRectGetMaxX(m) - f.size.width;
         }
@@ -690,6 +692,7 @@ typedef void (^Callback)();
     if (CGRectEqualToRect(rect, CGRectZero)) {
         return f;
     }
+    
     return CGRectUnion(rect, f);
 }
 
@@ -697,6 +700,7 @@ typedef void (^Callback)();
 - (CGSize)getMaxSizeWith:(CGSize)maxSizeForAccessory
 {
     CGSize maxSize = CGRectInfinite.size;
+    
     maxSize.width = [self shouldExpandToAccessoryWidth] ? CGRectInfinite.size.width : maxSizeForAccessory.width;
     maxSize.height = [self shouldExpandToAccessoryHeight] ? CGRectInfinite.size.height : maxSizeForAccessory.height;
     return maxSize;
@@ -741,7 +745,7 @@ typedef void (^Callback)();
     CGFloat adjustX = [self offsetXToPositionRect:self.frame
                                         overPoint:self.annotationAnchorPoint
                                        withMargin:[self.anchorMargin floatValue]];
-
+    
     // make sure frame is not on half pixels CGRectIntegral(self.frame)
     self.frame = CGRectIntegral(CGRectOffset(self.frame, adjustX, 0));
 }
@@ -767,6 +771,7 @@ typedef void (^Callback)();
     return offsetX;
 }
 
+
 #pragma mark - Size That Fits
 - (CGSize)sizeThatFits:(CGSize)size
 {
@@ -785,10 +790,12 @@ typedef void (^Callback)();
     }
 }
 
+
 #pragma mark - Bubble Shaped Mask
 - (void)addBubbleMask
 {
     CGRect b = self.layer.bounds;
+    
     self.maskLayer.frame = b;
     
     CGPoint anchorPoint = [self.annotationView convertPoint:self.annotationAnchorPoint toView:self];
@@ -796,7 +803,7 @@ typedef void (^Callback)();
     BOOL pointingDown = (self.arrowDirection == GBCustomCalloutArrowDirectionDown);
     CGFloat y = pointingDown ? CGRectGetHeight(b) : -ARROW_HEIGHT;
     CGPoint point = CGPointMake(anchorPoint.x - CGRectGetMinX(b), y);
-
+    
     [self addArrowLayer:self.arrowLayer toMaskLayer:self.maskLayer atPoint:point];
     
     // move up or down for arrow
@@ -811,7 +818,7 @@ typedef void (^Callback)();
 
 - (void)addArrowLayer:(CAShapeLayer *)arrowLayer toMaskLayer:(CALayer *)maskLayer atPoint:(CGPoint)point
 {
-    arrowLayer.frame = CGRectMake(point.x - (ARROW_WIDTH/2), point.y, ARROW_WIDTH, ARROW_HEIGHT);
+    arrowLayer.frame = CGRectMake(point.x - (ARROW_WIDTH / 2), point.y, ARROW_WIDTH, ARROW_HEIGHT);
     [self configureArrowLayer:arrowLayer];
     [maskLayer addSublayer:arrowLayer];
     
@@ -824,6 +831,7 @@ typedef void (^Callback)();
     BOOL pointingDown = (self.arrowDirection == GBCustomCalloutArrowDirectionDown);
     CGRectEdge edge = pointingDown ? CGRectMaxYEdge : CGRectMinYEdge;
     CGMutablePathRef path = [self newTrianglePathForRect:arrowLayer.bounds pointingAtEdge:edge];
+    
     arrowLayer.path = path;
     CGPathRelease(path);
 }
@@ -892,19 +900,18 @@ typedef void (^Callback)();
         self.alpha = 0;
         self.hidden = NO;
         [UIView animateWithDuration:0.3 animations:[self animationFadeIn] completion:nil];
-    }
-    else {
+    } else {
         [self setLayerAnchorFromAnnotationAnchorPoint];
         self.transform = CGAffineTransformMakeScale(0.5, 0.5);
         self.hidden = NO;
         [UIView animateWithDuration:0.15
                          animations:[self animationScale:1.05]
                          completion:^(BOOL finished) {
-                             [UIView animateWithDuration:0.05
-                                              animations:[self animationResetTransform]
-                                              completion:^(BOOL finished) {
-                                                  [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
-                                              }];
+                             [UIView  animateWithDuration:0.05
+                                               animations:[self animationResetTransform]
+                                               completion:^(BOOL finished) {
+                                                   [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
+                                               }];
                          }];
     }
 }
@@ -955,15 +962,14 @@ typedef void (^Callback)();
         [UIView animateWithDuration:0.05
                          animations:[self animationScale:1.05]
                          completion:^(BOOL finished) {
-                             [UIView animateWithDuration:0.15
-                                              animations:[self animationScale:0.5]
-                                              completion:^(BOOL finished) {
-                                                  [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
-                                                  [_self removeFromSuperview];
-                                              }];
+                             [UIView  animateWithDuration:0.15
+                                               animations:[self animationScale:0.5]
+                                               completion:^(BOOL finished) {
+                                                   [_self setLayerAnchor:CGPointMake(0.5, 0.5)];
+                                                   [_self removeFromSuperview];
+                                               }];
                          }];
-    }
-    else {
+    } else {
         [UIView animateWithDuration:0.3
                          animations:[self animationFadeOut]
                          completion:^(BOOL finished) {
@@ -1022,6 +1028,7 @@ typedef void (^Callback)();
     self.layer.position = position;
     self.layer.anchorPoint = point;
 }
+
 
 #pragma mark Map Moving
 - (BOOL)isContainedByConstrainingRect
@@ -1103,11 +1110,13 @@ typedef void (^Callback)();
     // Do nothing, just absorb the double tap away from the mapview
 }
 
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     if (self.calloutTapTriggersRightAccessory) {
         return NO;
     }
+    
     return YES;
 }
 
@@ -1209,9 +1218,9 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      | Title                                  |
-     ||________________________________________|
+     |||________________________________________|
      | Subtitle                               |
-     ||________________________________________|
+     |||________________________________________|
      */
     __block CGFloat y = 0;
     

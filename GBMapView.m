@@ -20,7 +20,7 @@
 #pragma mark - GBMapView
 #pragma mark -
 
-@interface GBMapView()
+@interface GBMapView ()
 {}
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)annotationView;
@@ -41,8 +41,10 @@
     if (!_annotationViewClass) {
         _annotationViewClass = [GBAnnotationView class];
     }
+    
     return _annotationViewClass;
 }
+
 
 #pragma mark - LifeCycle
 - (void)_init
@@ -50,39 +52,48 @@
     self.delegate = self;
 }
 
+
 - (id)init
 {
     self = [super init];
+    
     if (self) {
         [self _init];
     }
+    
     return self;
 }
+
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
+    
     if (self) {
         [self _init];
     }
+    
     return self;
 }
+
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    
     if (self) {
         [self _init];
     }
+    
     return self;
 }
+
 
 #pragma mark - MKMapViewDelegate
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
     // in case it's the user location, we already have an annotation, so just return nil
-    if ([annotation isKindOfClass:[MKUserLocation class]])
-    {
+    if ([annotation isKindOfClass:[MKUserLocation class]]) {
         return nil;
     }
     
@@ -91,21 +102,23 @@
     NSString *identifier = NSStringFromClass([annotation class]);
     id annotationView = [self dequeueReusableAnnotationViewWithIdentifier:identifier];
     
-    if (annotationView == nil)
-    {
+    if (annotationView == nil) {
         annotationView = [[[annotationViewClass class] alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
+        
         if ([annotationView respondsToSelector:@selector(setMapView:)]) {
             [annotationView setMapView:self];
         }
-        
     }
+    
     return annotationView;
 }
+
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return NO;
 }
+
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(GBAnnotationView *)annotationView
 {
@@ -125,6 +138,7 @@
         self.didDeselectAnnotationsView(self, annotationView);
     }
 }
+
 
 - (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views
 {
@@ -189,6 +203,7 @@
     }
 }
 
+
 // user tapped the disclosure button in the callout
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)annotationView calloutAccessoryControlTapped:(UIControl *)control
 {
@@ -196,6 +211,7 @@
         self.calloutAccessoryControlTapped(self, annotationView, control);
     }
 }
+
 
 #pragma mark -
 #pragma mark Map conversion methods
@@ -205,20 +221,24 @@
     return round(MERCATOR_OFFSET + MERCATOR_RADIUS * longitude * M_PI / 180.0);
 }
 
+
 - (double)latitudeToPixelSpaceY:(double)latitude
 {
     return round(MERCATOR_OFFSET - MERCATOR_RADIUS * logf((1 + sinf(latitude * M_PI / 180.0)) / (1 - sinf(latitude * M_PI / 180.0))) / 2.0);
 }
+
 
 - (double)pixelSpaceXToLongitude:(double)pixelX
 {
     return ((round(pixelX) - MERCATOR_OFFSET) / MERCATOR_RADIUS) * 180.0 / M_PI;
 }
 
+
 - (double)pixelSpaceYToLatitude:(double)pixelY
 {
     return (M_PI / 2.0 - 2.0 * atan(exp((round(pixelY) - MERCATOR_OFFSET) / MERCATOR_RADIUS))) * 180.0 / M_PI;
 }
+
 
 #pragma mark -
 #pragma mark Helper methods
@@ -256,8 +276,10 @@
     
     // create and return the lat/lng span
     MKCoordinateSpan span = MKCoordinateSpanMake(latitudeDelta, longitudeDelta);
+    
     return span;
 }
+
 
 #pragma mark -
 #pragma mark Public methods
@@ -277,9 +299,11 @@
     [self setRegion:region animated:animated];
 }
 
+
 - (double)zoomLevel
 {
     return 21.00 - log2(self.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * self.bounds.size.width));
 }
+
 
 @end
