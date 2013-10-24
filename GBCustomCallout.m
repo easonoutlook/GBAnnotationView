@@ -74,7 +74,9 @@ typedef void (^Callback)();
     } else {
         if ([self.title length]) {
             if (!_titleView) {
-                _titleView = [GBCustomTitleLabel new];
+                GBCustomTitleLabel *customTitleView = [GBCustomTitleLabel new];
+                customTitleView.maxSize = self.maxSizeForTitle;
+                _titleView = customTitleView;
             }
             
             if ([_titleView isKindOfClass:[GBCustomTitleLabel class]]) {
@@ -105,7 +107,9 @@ typedef void (^Callback)();
     } else {
         if ([self.subtitle length]) {
             if (!_subtitleView) {
-                _subtitleView = [GBCustomSubtitleLabel new];
+                GBCustomSubtitleLabel *customSubtitleLabel = [GBCustomSubtitleLabel new];
+                customSubtitleLabel.maxSize = self.maxSizeForSubTitle;
+                _subtitleView = customSubtitleLabel;
             }
             
             if ([_subtitleView isKindOfClass:[GBCustomSubtitleLabel class]]) {
@@ -132,6 +136,7 @@ typedef void (^Callback)();
         _contentView = [GBCustomContentView new];
         [_contentView addSubview:self.titleView];
         [_contentView addSubview:self.subtitleView];
+        [_contentView sizeToFit];
     }
     
     return _contentView;
@@ -436,17 +441,17 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      |             Header View                |
-     ||________________________________________|
+     |||________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     ||Access..|      - titleView   |Accessor..|
+     |||Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     ||________________________________________|
+     |||________________________________________|
      */
     
     if (!self.annotationView) return;
@@ -1154,11 +1159,32 @@ typedef void (^Callback)();
     self = [super init];
     
     if (self) {
+        self.numberOfLines = 0;
         self.font = [UIFont systemFontOfSize:16];
         self.backgroundColor = [UIColor clearColor];
     }
     
     return self;
+}
+
+
+- (NSInteger)numberOfLines
+{
+    return 0;
+}
+
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    CGSize sizeThatFits = [super sizeThatFits:size];
+    
+    if (!CGSizeEqualToSize(self.maxSize, CGSizeZero) ) {
+        CGFloat maxWidth  = MIN(sizeThatFits.width, self.maxSize.width);
+        CGFloat maxHeight = MIN(sizeThatFits.height, self.maxSize.height);
+        sizeThatFits = CGSizeMake(maxWidth, maxHeight);
+    }
+    
+    return sizeThatFits;
 }
 
 
@@ -1205,6 +1231,7 @@ typedef void (^Callback)();
     
     [self.subviews
      enumerateObjectsUsingBlock: ^(UIView *subview, NSUInteger idx, BOOL *stop) {
+         [subview sizeToFit];
          CGSize size = subview.frame.size;
          y += size.height;
          x = MAX(x, size.width);
@@ -1218,9 +1245,9 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      | Title                                  |
-     |||________________________________________|
+     ||||________________________________________|
      | Subtitle                               |
-     |||________________________________________|
+     ||||________________________________________|
      */
     __block CGFloat y = 0;
     

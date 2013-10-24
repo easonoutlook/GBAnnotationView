@@ -42,22 +42,24 @@
         annotation3.subtitle = @"Yeah yeah yeah, aight!";
         annotation3.coordinate = CLLocationCoordinate2DMake(37.7700, -122.4701);
         annotation3.type = GBAnnotationTypeMuseum;
-
-        _mapAnnotations = [[NSArray alloc] initWithObjects: annotation1, annotation2, annotation3, nil];
+        
+        _mapAnnotations = [[NSArray alloc] initWithObjects:annotation1, annotation2, annotation3, nil];
     }
+    
     return _mapAnnotations;
 }
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.mapView.annotationViewClass = [DemoAnnotationView class];
-    self.mapView.calloutAccessoryControlTapped = ^(GBMapView *mapView, MKAnnotationView *annotationView, UIControl *control){
+    self.mapView.calloutAccessoryControlTapped = ^(GBMapView *mapView, MKAnnotationView *annotationView, UIControl *control) {
         [self performSegueWithIdentifier:@"showDetails" sender:annotationView];
     };
     
-	[self.mapView addAnnotations:self.mapAnnotations];
+    [self.mapView addAnnotations:self.mapAnnotations];
     
     MKCoordinateRegion newRegion;
     newRegion.center.latitude = 37.786996;
@@ -68,6 +70,7 @@
     [self.mapView setRegion:newRegion animated:YES];
 }
 
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.destinationViewController isKindOfClass:[DetailViewController class]]) {
@@ -77,9 +80,8 @@
             id <MKAnnotation> annotation = ((MKAnnotationView *)sender).annotation;
             detailVC.imageName = annotation.title;
         }
-        
     }
-    
 }
+
 
 @end

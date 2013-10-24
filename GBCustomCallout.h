@@ -50,7 +50,7 @@ typedef enum {
 #pragma mark - Callout Modifications
 @property (nonatomic, assign) CGPoint offset;
 
-@property (nonatomic, assign) CGSize maxSizeForLeftAccessory, maxSizeForRightAccessory;
+@property (nonatomic, assign) CGSize maxSizeForLeftAccessory, maxSizeForRightAccessory, maxSizeForTitle, maxSizeForSubTitle;
 
 // space between map border and callout (on automove)
 @property (nonatomic, strong) NSNumber *horizontalMargin, *verticalMargin;
@@ -120,6 +120,7 @@ typedef enum {
 #pragma mark - *** GBCustomTitleLabel *** -
 @interface GBCustomTitleLabel : UILabel
 {}
+@property (nonatomic, assign) CGSize maxSize;
 @end;
 #pragma mark - *** GBCustomSubtitleLabel *** -
 @interface GBCustomSubtitleLabel : GBCustomTitleLabel

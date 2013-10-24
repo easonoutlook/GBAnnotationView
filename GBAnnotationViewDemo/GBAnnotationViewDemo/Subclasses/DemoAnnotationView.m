@@ -59,6 +59,9 @@ static UIView *_expandingView;
         _calloutView.delegate = self;
         _calloutView.verticalPadding = @10;
         _calloutView.maxSizeForLeftAccessory = CGSizeMake(30, 30);
+        
+        _calloutView.maxSizeForTitle = CGSizeMake(180, MAXFLOAT);
+        _calloutView.maxSizeForSubTitle = CGSizeMake(150, MAXFLOAT);
     }
     
     return _calloutView;
