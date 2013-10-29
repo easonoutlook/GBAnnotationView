@@ -120,7 +120,7 @@ typedef enum {
 
 @protocol GBCustomCalloutConstrainingRectSupplier <NSObject>
 @optional
-- (CGRect)rectToConstrainCallouts;
+- (CGRect)           rectToConstrainCallouts;
 @end
 
 

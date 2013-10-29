@@ -516,10 +516,12 @@ typedef void (^Callback)();
                     inAnnotationView:(MKAnnotationView *)annotationView
 {
     CGRect contraintRect = mapView.bounds;
+    
     if ([mapView respondsToSelector:@selector(rectToConstrainCallouts)]) {
         id<GBCustomCalloutConstrainingRectSupplier> map = (id<GBCustomCalloutConstrainingRectSupplier>)mapView;
         contraintRect = [map rectToConstrainCallouts];
     }
+    
     return [mapView convertRect:contraintRect toView:annotationView];
 }
 
