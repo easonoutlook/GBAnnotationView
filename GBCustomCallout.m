@@ -441,17 +441,17 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      |             Header View                |
-     ||||________________________________________|
+     |________________________________________|
      |        |      Top View      |          |
      |        |--------------------|          |
      |  Left  |    Content View    |  Right   |
-     ||||Access..|      - titleView   |Accessor..|
+     |Access..|      - titleView   |Accessor..|
      |  view  |      - subtitleVi..|   View   |
      |        |--------------------|          |
      |        |    Bottom View     |          |
      ------------------------------------------
      |             Footer View                |
-     ||||________________________________________|
+     |________________________________________|
      */
     
     if (!self.annotationView) return;
@@ -515,7 +515,12 @@ typedef void (^Callback)();
 - (CGRect)determineContraintRectWith:(MKMapView *)mapView
                     inAnnotationView:(MKAnnotationView *)annotationView
 {
-    return [mapView.layer convertRect:mapView.layer.bounds toLayer:annotationView.layer];
+    CGRect contraintRect = mapView.bounds;
+    if ([mapView respondsToSelector:@selector(rectToConstrainCallouts)]) {
+        id<GBCustomCalloutConstrainingRectSupplier> map = (id<GBCustomCalloutConstrainingRectSupplier>)mapView;
+        contraintRect = [map rectToConstrainCallouts];
+    }
+    return [mapView convertRect:contraintRect toView:annotationView];
 }
 
 
@@ -1237,9 +1242,9 @@ typedef void (^Callback)();
     /*
      ------------------------------------------
      | Title                                  |
-     |||||________________________________________|
+     |________________________________________|
      | Subtitle                               |
-     |||||________________________________________|
+     |________________________________________|
      */
     __block CGFloat y = 0;
     

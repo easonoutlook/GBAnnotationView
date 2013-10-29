@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 @protocol GBCustomCalloutViewDelegate;
+@protocol GBCustomCalloutConstrainingRectSupplier;
 
 // options for which directions the callout is allowed to "point" in.
 typedef enum {
@@ -115,6 +116,13 @@ typedef enum {
 - (BOOL)             shouldConstrainRightAccessoryToContent;
 
 @end
+
+
+@protocol GBCustomCalloutConstrainingRectSupplier <NSObject>
+@optional
+- (CGRect)rectToConstrainCallouts;
+@end
+
 
 #pragma mark - ***** Helper CLASSES ***** -
 #pragma mark - *** GBCustomTitleLabel *** -

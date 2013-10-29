@@ -305,5 +305,4 @@
     return 21.00 - log2(self.region.span.longitudeDelta * MERCATOR_RADIUS * M_PI / (180.0 * self.bounds.size.width));
 }
 
-
 @end
