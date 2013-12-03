@@ -5,6 +5,7 @@
 //  Created by Adam Barrett on 2013-09-06.
 //
 //
+
 #import "GBAnnotationView.h"
 
 static UIImage *_standardPinImage;
@@ -102,6 +103,8 @@ static UIView *_rightCalloutAccessoryView;
 {
     if ([calloutAccessory isKindOfClass:[UIControl class]]) {
         [self.mapView.delegate mapView:self.mapView annotationView:self calloutAccessoryControlTapped:(UIControl *)calloutAccessory];
+    } else {
+        [self.mapView.delegate mapView:self.mapView annotationView:self calloutAccessoryControlTapped:nil];
     }
 }
 

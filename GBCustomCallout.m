@@ -1062,6 +1062,8 @@ typedef void (^Callback)();
         CGPoint offset = [self offsetToContainRect:self.frame
                                             inRect:contrainingRect];
         [self moveMapByOffset:offset then:callback];
+        
+        
     } else {
         if (callback) {
             callback();
@@ -1140,10 +1142,8 @@ typedef void (^Callback)();
     
     SEL calloutAccessoryTappedSelector = sel_registerName("calloutAccessoryTapped:");
     
-    if (self.rightAccessoryView) {
-        if ([self.annotationView respondsToSelector:calloutAccessoryTappedSelector]) {
-            [self.annotationView performSelector:calloutAccessoryTappedSelector withObject:self.rightAccessoryView afterDelay:0.3];
-        }
+    if ([self.annotationView respondsToSelector:calloutAccessoryTappedSelector]) {
+        [self.annotationView performSelector:calloutAccessoryTappedSelector withObject:self.rightAccessoryView afterDelay:0.3];
     }
     
     [self performSelector:@selector(deactivate) withObject:nil afterDelay:0.3];
