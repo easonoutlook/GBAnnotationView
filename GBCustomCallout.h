@@ -115,12 +115,14 @@ typedef enum {
 - (BOOL)             shouldConstrainLeftAccessoryToContent;
 - (BOOL)             shouldConstrainRightAccessoryToContent;
 
+- (void)calloutWillAppear:(GBCustomCallout *)callout;
 @end
 
 
 @protocol GBCustomCalloutConstrainingRectSupplier <NSObject>
 @optional
 - (CGRect)           rectToConstrainCallouts;
+
 @end
 
 

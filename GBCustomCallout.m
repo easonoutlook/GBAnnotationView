@@ -423,6 +423,9 @@ typedef void (^Callback)();
     [self setNeedsLayout];
     [self layoutIfNeeded];
     
+    if ([self.delegate respondsToSelector:@selector(calloutWillAppear:)]) {
+        [self.delegate calloutWillAppear:self];
+    }
     
     [self animateIn];
 }
@@ -575,7 +578,7 @@ typedef void (^Callback)();
 - (CGRect)positionSubviewsRelativeToEachOther
 {
     CGSize contentSize = self.contentView.frame.size;
-    __block CGRect wrappingRect = CGRectMake(0, 0, contentSize.width, contentSize.height);
+    CGRect wrappingRect = CGRectMake(0, 0, contentSize.width, contentSize.height);
     
     self.contentView.frame = wrappingRect;
     
@@ -906,12 +909,12 @@ typedef void (^Callback)();
 
 - (void)animateInWithType:(GBCustomCalloutAnimation)type
 {
-    __block typeof(self) _self = self;
+    __weak typeof(self) _self = self;
     
     if (type == GBCustomCalloutAnimationFade) {
         self.alpha = 0;
         self.hidden = NO;
-        [UIView animateWithDuration:0.3 animations:[self animationFadeIn] completion:nil];
+        [UIView animateWithDuration:0.35 animations:[self animationFadeIn] completion:nil];
     } else {
         [self setLayerAnchorFromAnnotationAnchorPoint];
         self.transform = CGAffineTransformMakeScale(0.5, 0.5);
@@ -931,7 +934,7 @@ typedef void (^Callback)();
 
 - (Callback)animationFadeIn
 {
-    __block typeof(self) _self = self;
+    __weak typeof(self) _self = self;
     return [^{
         _self.alpha = 1;
     } copy];
@@ -940,7 +943,7 @@ typedef void (^Callback)();
 
 - (Callback)animationFadeOut
 {
-    __block typeof(self) _self = self;
+    __weak typeof(self) _self = self;
     return [^{
         _self.alpha = 0;
     } copy];
@@ -949,7 +952,7 @@ typedef void (^Callback)();
 
 - (Callback)animationScale:(CGFloat)scaleFactor
 {
-    __block typeof(self) _self = self;
+    __weak typeof(self) _self = self;
     return [^{
         _self.transform = CGAffineTransformMakeScale(scaleFactor, scaleFactor);
     } copy];
@@ -958,7 +961,7 @@ typedef void (^Callback)();
 
 - (Callback)animationResetTransform
 {
-    __block typeof(self) _self = self;
+    __weak typeof(self) _self = self;
     return [^{
         _self.transform = CGAffineTransformIdentity;
     } copy];
@@ -967,7 +970,7 @@ typedef void (^Callback)();
 
 - (void)animateOutWithType:(GBCustomCalloutAnimation)type
 {
-    __block typeof(self) _self = self;
+    __weak typeof(self) _self = self;
     
     if (type == GBCustomCalloutAnimationBounce) {
         [self setLayerAnchorFromAnnotationAnchorPoint];
@@ -982,7 +985,7 @@ typedef void (^Callback)();
                                                }];
                          }];
     } else {
-        [UIView animateWithDuration:0.3
+        [UIView animateWithDuration:0.35
                          animations:[self animationFadeOut]
                          completion:^(BOOL finished) {
                              [_self removeFromSuperview];
@@ -1143,10 +1146,10 @@ typedef void (^Callback)();
     SEL calloutAccessoryTappedSelector = sel_registerName("calloutAccessoryTapped:");
     
     if ([self.annotationView respondsToSelector:calloutAccessoryTappedSelector]) {
-        [self.annotationView performSelector:calloutAccessoryTappedSelector withObject:self.rightAccessoryView afterDelay:0.3];
+        [self.annotationView performSelector:calloutAccessoryTappedSelector withObject:self.rightAccessoryView afterDelay:0.35];
     }
     
-    [self performSelector:@selector(deactivate) withObject:nil afterDelay:0.3];
+    [self performSelector:@selector(deactivate) withObject:nil afterDelay:0.35];
 }
 
 
